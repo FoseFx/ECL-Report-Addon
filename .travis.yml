@@ -1,0 +1,8 @@
+branches:
+  only: 
+    - master
+language: node_js
+node_js:
+- 10
+after_script:
+- "bash <(curl -s https://codecov.io/bash) -t $(echo $UPLOAD_TOKEN)"
