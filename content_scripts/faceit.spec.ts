@@ -55,8 +55,11 @@ describe('initDetectElements', () => {
 
 it('should detectElements', () => {
     const obj = new FaceItClass();
+    const spy = spyOn(obj, 'addReportButtons');
     let res = obj.detectElements();
     expect(res).toEqual(false);
+    expect(spy).not.toHaveBeenCalled();
+
     for (let i = 0; i < 10; i++) {
         const el = document.createElement('match-team-member-v2');
         el.setAttribute('eid', '' + i);
@@ -64,6 +67,7 @@ it('should detectElements', () => {
     }
     res = obj.detectElements();
     expect(res).toEqual(true);
+    expect(spy).toHaveBeenCalled();
 });
 
 it('should injectOnRouteChangeScript', () => {
@@ -83,4 +87,19 @@ it('should getBrowser', () => {
     expect(obj.getBrowser()).toEqual('some secret shit');
     // @ts-ignore
     delete window.browser;
+});
+
+
+it('should add button to players', () => {
+    const obj = new FaceItClass();
+    document.body.innerHTML = '';
+    for (let i = 0; i < 10; i++) {
+        const el = document.createElement('match-team-member-v2');
+        el.setAttribute('eid', '' + i);
+        const child = document.createElement('div');
+        child.className = 'match-team-member__controls';
+        el.appendChild(child);
+        document.body.appendChild(el);
+    }
+    obj.addReportButtons(document.querySelectorAll('match-team-member-v2'));
 });

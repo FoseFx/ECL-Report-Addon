@@ -39,8 +39,11 @@ export class FaceItClass {
 
     detectElements(): boolean {
         const nodes = document.querySelectorAll('match-team-member-v2');
-        console.log(nodes);
-        return nodes.length !== 0;
+        if (nodes.length === 0) {
+            return false;
+        }
+        this.addReportButtons(nodes);
+        return true;
     }
 
     isRoomRoute(route: string): boolean {
@@ -49,6 +52,8 @@ export class FaceItClass {
         return matches;
     }
 
+    // this function injects `faceit_event_binding.ts` into the faceit website
+    // it will make sure the `ecl_report_addon_route_change` event will be dispatched
     injectOnRouteChangeScript() {
         const el = document.createElement('script');
         el.type = 'module';
@@ -56,9 +61,24 @@ export class FaceItClass {
         document.head.appendChild(el);
     }
 
+    // own function needed b/c of tests
     getBrowser(): any {
         // @ts-ignore
         return browser;
+    }
+
+    // this will add the ECL-Report button to each player in the match
+    addReportButtons(nodes: NodeListOf<Element>) {
+        // @ts-ignore
+        const arr = Array.from(nodes);
+
+        for (const node of arr) {
+            const parentOfButton = node.querySelector('.match-team-member__controls');
+            const el = document.createElement('a');
+            el.className = 'match-team-member__controls__button inline-block pull-left';
+            el.innerHTML = 'ecl';
+            parentOfButton.appendChild(el);
+        }
     }
 
 }
