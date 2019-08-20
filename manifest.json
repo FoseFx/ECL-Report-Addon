@@ -1,0 +1,19 @@
+{
+    "manifest_version": 2,
+    "name": "ecl-report-addon",
+    "version": "1.0.0",
+    "description": "An addon that makes reporting players in ECL (ecl.gg) easier",
+    "homepage_url": "https://www.fosefx.com/",  
+    "permissions": [
+      "activeTab"
+    ],
+    "content_scripts": [
+        {
+          "matches": ["https://www.faceit.com/*"],
+          "js": ["content_scripts/faceit.js"]
+        }
+    ],
+    "web_accessible_resources": [
+      "content_scripts/faceit_event_binding.js"
+    ]
+}
