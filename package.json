@@ -11,7 +11,7 @@
     "remove_export": "sed -i 's/export //' dist/content_scripts/faceit.js",
     "test": "jest --coverage",
     "lint": "tslint -c tslint.json content_scripts/*.ts",
-    "lint:fix": "tslint -c tslint.json content_scripts/*.ts"
+    "lint:fix": "tslint -c tslint.json content_scripts/*.ts --fix"
   },
   "keywords": [],
   "author": "FoseFx <info@fosefx.com>",
