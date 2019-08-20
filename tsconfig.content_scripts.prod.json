@@ -6,7 +6,8 @@
         "sourceMap": false,
         "target": "es6",
         "outDir": "dist/content_scripts",
-        "skipLibCheck": true
+        "skipLibCheck": true,
+        "allowJs": true
     },
     "include": [
         "content_scripts"

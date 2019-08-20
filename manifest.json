@@ -10,10 +10,11 @@
     "content_scripts": [
         {
           "matches": ["https://www.faceit.com/*"],
-          "js": ["content_scripts/faceit.js"]
+          "js": ["content_scripts/faceit_loader.js"]
         }
     ],
     "web_accessible_resources": [
-      "content_scripts/faceit_event_binding.js"
+      "content_scripts/faceit_event_binding.js",
+      "content_scripts/faceit.js"
     ]
 }

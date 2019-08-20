@@ -1,8 +1,32 @@
 'use strict';
+
+export const ECL_ORGA_ID = 'edc12227-3b07-4c5e-9325-f223025628f3';
+
+interface Player {
+    name: string;
+    guid: string;
+    isUser: boolean;
+}
+
+interface AngualarPlayerElementInfo {
+    currentUserGuid: string;
+    teamMember: {
+        id: string;
+        nickname: string
+    };
+    currentMatch: {
+        match: {
+            organizerId: string
+        }
+    };
+}
+
+
 export class FaceItClass {
 
 
     currentInterval = -1;
+    players: Player[] = null;
 
     init() {
         // @ts-ignore
@@ -12,7 +36,6 @@ export class FaceItClass {
         // @ts-ignore
         window.ecl_reporter_init = true;
 
-        this.injectOnRouteChangeScript();
 
         document.addEventListener('ecl_report_addon_route_change', (e: CustomEvent) => {
             this.initDetectElements(e.detail);
@@ -22,6 +45,7 @@ export class FaceItClass {
 
     initDetectElements(route: string) {
         console.log('initdetectelements');
+        console.log('isroom', this.isRoomRoute(route));
 
         if (this.isRoomRoute(route)) { // user routed to /room/
             const interval = setInterval(() => { // wait for everything to load
@@ -34,15 +58,21 @@ export class FaceItClass {
         } else { // user was on /room/ but left before it loaded
             clearInterval(this.currentInterval);
             this.currentInterval = -1;
+            this.players = null;
         }
     }
 
     detectElements(): boolean {
         const nodes = document.querySelectorAll('match-team-member-v2');
+        console.log(nodes);
+
         if (nodes.length === 0) {
             return false;
         }
-        this.addReportButtons(nodes);
+        if (this.isECLRoom(nodes)) {
+            this.addReportButtons(nodes);
+            this.buildPlayersArray(nodes);
+        }
         return true;
     }
 
@@ -52,19 +82,15 @@ export class FaceItClass {
         return matches;
     }
 
-    // this function injects `faceit_event_binding.ts` into the faceit website
-    // it will make sure the `ecl_report_addon_route_change` event will be dispatched
-    injectOnRouteChangeScript() {
-        const el = document.createElement('script');
-        el.type = 'module';
-        el.src = this.getBrowser().extension.getURL('content_scripts/faceit_event_binding.js');
-        document.head.appendChild(el);
-    }
+    isECLRoom(nodes: NodeListOf<Element>): boolean {
+        const firstElement = nodes[0];
+        if (!firstElement) { // something went wrong
+            return false;
+        }
+        const data = this.getDataAboutElementFromAngular(firstElement);
+        console.log('data', data);
 
-    // own function needed b/c of tests
-    getBrowser(): any {
-        // @ts-ignore
-        return browser;
+        return data.currentMatch.match.organizerId === ECL_ORGA_ID;
     }
 
     // this will add the ECL-Report button to each player in the match
@@ -81,11 +107,36 @@ export class FaceItClass {
         }
     }
 
+    // this function builds an array on Players for the current room
+    buildPlayersArray(nodes: NodeListOf<Element>) {
+        // @ts-ignore
+        const arr: Element[] = Array.from(nodes);
+
+        const players: Player[] = [];
+
+        for (const el of arr) {
+            const data = this.getDataAboutElementFromAngular(el);
+            const player: Player = {
+                guid: data.teamMember.id,
+                name: data.teamMember.nickname,
+                isUser: data.currentUserGuid === data.teamMember.id
+            };
+            players.push(player);
+        }
+        this.players = players;
+        console.log(players);
+
+    }
+
+    // for debugging purposes angularJS (the framework faceit is written in) ships with
+    // a method witch returns the data from a given angular element
+    // we use it to extract guid and nickname for each player
+    getDataAboutElementFromAngular(el: Element): AngualarPlayerElementInfo {
+        // @ts-ignore
+        return angular.element(el).inheritedData().$matchTeamMemberV2Controller;
+    }
+
 }
-// this will start the init() function in browsers,
-// and wont do anything in a testing-env
-// @ts-ignore
-if (typeof browser !== 'undefined') {
-    const i = new FaceItClass();
-    i.init();
-}
+
+const i = new FaceItClass();
+i.init();
