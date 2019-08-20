@@ -48,13 +48,13 @@ export class FaceItClass {
         console.log('isroom', this.isRoomRoute(route));
 
         if (this.isRoomRoute(route)) { // user routed to /room/
-            const interval = setInterval(() => { // wait for everything to load
+            const interval = setInterval(() => {
                 this.currentInterval = interval;
                 if (this.detectElements()) { // when elements found, clear interval
                     clearInterval(this.currentInterval);
                     this.currentInterval = -1;
                 }
-            }, 3000);
+            }, 3000) as unknown as number;
         } else { // user was on /room/ but left before it loaded
             clearInterval(this.currentInterval);
             this.currentInterval = -1;

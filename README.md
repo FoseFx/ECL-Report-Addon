@@ -1,5 +1,6 @@
 # ECL Report Addon [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v1.4%20adopted-ff69b4.svg)](code-of-conduct.md) [![codecov](https://codecov.io/gh/FoseFx/ECL-Report-Addon/branch/master/graph/badge.svg)](https://codecov.io/gh/FoseFx/ECL-Report-Addon) [![Travis Build](https://travis-ci.com/FoseFx/ECL-Report-Addon.svg?branch=master)](https://travis-ci.com/FoseFx/ECL-Report-Addon)
 
+# THIS ADDON IN WIP AND CURRENTLY: NOT WORKING
 
 (Name and patent pending :P)
 # For users
@@ -31,3 +32,30 @@ Run `npm test` to run all tests and to generate a coverage report (open using `f
 Code style and readability is important! Use `npm run lint` to check if your code is compliant, if not try `npm run lint:fix` and/or manualy fix it.
 
 
+# TODO
+```
+Needed fields:
+
+Major fault:
+- offense => checkboxes
+- division => document.querySelector("div.fi-navbar__header.--interactive").getAttribute("title")
+- matchroom => document.loaction.href
+- player => "https://www.faceit.com" + document.querySelector("div.match-team-member__details__name > a").getAttribute("href")
+- explain => textarea
+- additional info => click to add (input)
+  round | descr
+- screenshots or video => click to add (input)
+- captcha LATER
+- updates per mail? => checkbox
+
+Minor fault:
+- where => switch *ing* <=> chat
+- division => document.querySelector("div.fi-navbar__header.--interactive").getAttribute("title")
+- matchroom => document.loaction.href
+- player => "https://www.faceit.com" + document.querySelector("div.match-team-member__details__name > a").getAttribute("href")
+- reason => textbox
+- screenshot => input
+- captcha
+
+
+```
