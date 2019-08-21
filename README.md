@@ -11,14 +11,14 @@ PM me [on twitter](https://www.twitter.com/FoseFx) or write me an [email](mailto
 
 
 # For Developers
-If you want to contribute to this project make sure you read the [CODE OF CONDUCT](CODE_OF_CONDUCT.md) and are familier with [How to contribute to open source](https://opensource.guide/how-to-contribute/#a-checklist-before-you-contribute).
+If you want to contribute to this project make sure you read the [CODE OF CONDUCT](CODE_OF_CONDUCT.md) and are familier with [How to contribute to open source](https://opensource.guide/how-to-contribute/#a-checklist-before-you-contribute). Read the [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Building
 > Note: The `npm run` commands are written for *NIX-systems and probably wont work for windows users
 
 0. Make sure you have npm installed
 1. Clone this repo: `git clone git@github.com:FoseFx/ECL-Report-Addon.git`
-2. Install Dependencies `npm ci`
+2. Install Dependencies `./setup.sh`
 3. Build the extention for development using `npm run build:dev`
 4. Build the extention for production using `npm run build:prod`
 
