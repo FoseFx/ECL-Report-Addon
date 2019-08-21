@@ -43,8 +43,14 @@ describe('MajorForm.vue', () => {
             additionalLinksData: [{links: 'https://nice.acme'}],
             emailReport: false,
         });
-        // @ts-ignore
-        wrapper.vm.$refs.form = {validate: () => {}};
+        let validateCalled = false;
+        let resetCalled = false;
+
+        wrapper.vm.$refs.form = {
+            validate: () => validateCalled = true,
+            reset: () => resetCalled = true,
+        } as unknown as MajorForm;
+
         const button = wrapper.find('.save-btn');
         button.vm.$emit('click');
 
@@ -60,7 +66,8 @@ describe('MajorForm.vue', () => {
                 },
             },
         ]]);
-
+        expect(validateCalled).toBe(true);
+        expect(resetCalled).toBe(true);
         wrapper.setData({
             valid: false,
             why: 'toxic',

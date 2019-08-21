@@ -92,6 +92,8 @@ export default class MajorForm extends Vue {
           additionalLinksData: this.additionalLinksData,
         },
       });
+      // @ts-ignore
+      this.$refs.form.reset();
     }
 }
 </script>
