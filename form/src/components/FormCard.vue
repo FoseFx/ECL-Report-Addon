@@ -48,6 +48,8 @@
       <v-btn outlined text>Cancel</v-btn>
     </v-card-actions>
 
+    <iframe src="https://report.ecl.gg/" width="100%" height="170px"></iframe>
+
   </v-card>
 </template>
 

@@ -11,6 +11,11 @@
         {
           "matches": ["https://www.faceit.com/*"],
           "js": ["content_scripts/faceit_loader.js"]
+        },
+        {
+          "matches": ["https://report.ecl.gg/*"],
+          "js": ["content_scripts/reporteclgg.js"],
+          "all_frames": true
         }
     ],
     "web_accessible_resources": [
