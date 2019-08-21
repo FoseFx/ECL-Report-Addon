@@ -1,7 +1,7 @@
 # ECL Report Addon 
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v1.4%20adopted-ff69b4.svg)](code-of-conduct.md) ![GitHub](https://img.shields.io/github/license/Fosefx/ECL-Report-Addon) [![Maintainability](https://api.codeclimate.com/v1/badges/53d21221c122857a0678/maintainability)](https://codeclimate.com/github/FoseFx/ECL-Report-Addon/maintainability) [![codecov](https://codecov.io/gh/FoseFx/ECL-Report-Addon/branch/master/graph/badge.svg)](https://codecov.io/gh/FoseFx/ECL-Report-Addon) [![Travis Build](https://travis-ci.com/FoseFx/ECL-Report-Addon.svg?branch=master)](https://travis-ci.com/FoseFx/ECL-Report-Addon) 
 
-# THIS ADDON IN WIP AND CURRENTLY: NOT WORKING
+# THIS ADDON IS WORK IN PROGRESS AND CURRENTLY: NOT WORKING
 
 (Name and patent pending :P)
 # For users
