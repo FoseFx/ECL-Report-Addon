@@ -21,6 +21,16 @@ interface AngualarPlayerElementInfo {
     };
 }
 
+interface VueAppInstance {
+    division: number;
+    complaiantUUID: string;
+    complaiantName: string;
+    reportedUUID: string;
+    reportedName: string;
+    email: string;
+    show: boolean;
+}
+
 
 export class FaceItClass {
 
@@ -70,8 +80,8 @@ export class FaceItClass {
             return false;
         }
         if (this.isECLRoom(nodes)) {
-            this.addReportButtons(nodes);
             this.buildPlayersArray(nodes);
+            this.addReportButtons(nodes);
         }
         return true;
     }
@@ -98,11 +108,16 @@ export class FaceItClass {
         // @ts-ignore
         const arr = Array.from(nodes);
 
-        for (const node of arr) {
+        for (let it = 0; it < arr.length; it++) {
+            if (this.players[it].isUser) {
+                continue;
+            }
+            const node = arr[it];
             const parentOfButton = node.querySelector('.match-team-member__controls');
             const el = document.createElement('a');
             el.className = 'match-team-member__controls__button inline-block pull-left';
             el.innerHTML = 'ecl';
+            el.href = `javascript:ecl_report_addon_report_click_handler(${it})`;
             parentOfButton.appendChild(el);
         }
     }
@@ -136,7 +151,23 @@ export class FaceItClass {
         return angular.element(el).inheritedData().$matchTeamMemberV2Controller;
     }
 
+    showReportPopup(index: number) {
+        console.log(index);
+        // todo
+        const app = this.getVueAppInstance();
+        app.show = true;
+    }
+
+    getVueAppInstance(): VueAppInstance {
+        // @ts-ignore
+        return window.ecl_addon_vue_instance.$children[0];
+    }
+
 }
 
 const i = new FaceItClass();
 i.init();
+// @ts-ignore
+window.ecl_report_addon_report_click_handler = (index: number) => {
+    i.showReportPopup(index);
+};

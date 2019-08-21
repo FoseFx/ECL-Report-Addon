@@ -1,13 +1,12 @@
 <template>
  <v-card
-    max-width="500px"
     class="mx-auto"
     outlined
   >
     <v-list-item three-line>
       <v-list-item-content>
         <div class="overline mb-4">Report</div>
-        <v-list-item-title class="headline mb-1">Report player '{{reportedNickname}}'</v-list-item-title>
+        <v-list-item-title class="headline mb-1">Report player '{{reportedName}}'</v-list-item-title>
         <p>Division: {{division}}</p>
       </v-list-item-content>
 
@@ -22,7 +21,7 @@
       </v-list-item-content>
     </v-list-item>
 
-    <v-tabs grow v-model="tab">
+    <v-tabs grow v-model="tab" color="warning">
       <v-tab key="minor">Minor</v-tab>
       <v-tab key="major">Major</v-tab>
     </v-tabs>
@@ -37,7 +36,7 @@
 
       <v-tab-item key="major">
         <v-card flat>
-          <MajorForm max-height="400px"></MajorForm>
+          <MajorForm v-on:submitted="onSubmit"></MajorForm>
         </v-card>
       </v-tab-item>
       
@@ -46,9 +45,6 @@
 
 
     <v-card-actions>
-      <v-btn outlined color="warning" text>
-        <v-icon left>mdi-pencil</v-icon>Save
-      </v-btn>
       <v-btn outlined text>Cancel</v-btn>
     </v-card-actions>
 
@@ -59,6 +55,7 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import MinorForm from './MinorForm.vue';
 import MajorForm from './MajorForm.vue';
+import { Report } from '../main';
 
 @Component({
     components: {
@@ -67,8 +64,32 @@ import MajorForm from './MajorForm.vue';
     },
 })
 export default class FormCard extends Vue {
-    @Prop() public reportedNickname!: string;
     @Prop() public division!: number;
+    @Prop() public complaiantUUID!: string;
+    @Prop() public complaiantName!: string;
+    @Prop() public reportedUUID!: string;
+    @Prop() public reportedName!: string;
+    @Prop() public email!: string;
+
     private tab = 0;
+
+    public onSubmit(event: Report) {
+      const type = this.tab === 0 ? 'minor' : 'major';
+      const report: Report = Object.assign({
+        type,
+        service: 'classical',
+        complaiantName: this.complaiantName,
+        complaiantUUID: this.complaiantUUID,
+        email: this.email,
+        emailPub: false,
+        data: {
+          division: this.division + '',
+          matchroomLink: document.location.href,
+        },
+        reportedUUID: this.reportedUUID,
+        reportedName: this.reportedName,
+      }, event);
+      console.log(report);
+    }
 }
 </script>

@@ -81,6 +81,7 @@ describe('detectElements', () => {
 
 it('should add button to players', () => {
     const obj = new FaceItClass();
+    obj.players = [];
     document.body.innerHTML = '';
     for (let i = 0; i < 10; i++) {
         const el = document.createElement('match-team-member-v2');
@@ -89,8 +90,20 @@ it('should add button to players', () => {
         child.className = 'match-team-member__controls';
         el.appendChild(child);
         document.body.appendChild(el);
+        obj.players.push({guid: i + '', isUser: i === 5, name: 'name' });
     }
     obj.addReportButtons(document.querySelectorAll('match-team-member-v2'));
+
+    for (let i = 0; i < 10; i++) {
+        let el = document.querySelector(`match-team-member-v2[eid="${i}"]`);
+        el = el.firstChild as Element;
+        if (i !== 5) {
+            expect(el.childElementCount).toEqual(1);
+            expect((el.firstChild as HTMLAnchorElement).href).toEqual(`javascript:ecl_report_addon_report_click_handler(${i})`);
+        } else {
+            expect(el.childElementCount).toEqual(0);
+        }
+    }
 });
 
 it('isECLRoom', () => {
@@ -127,7 +140,7 @@ it('getDataAboutElementFromAngular', () => {
 
 it('should buildPlayersArray', () => {
     const obj = new FaceItClass();
-    const spy = spyOn(obj, 'getDataAboutElementFromAngular').and.callFake(o => o);
+    spyOn(obj, 'getDataAboutElementFromAngular').and.callFake(o => o);
 
     const fakeNodes: NodeListOf<Element> = [
         {teamMember: {id: 'id1', nickname: 'nn1'}, currentUserGuid: 'id1'},
@@ -145,5 +158,36 @@ it('should buildPlayersArray', () => {
 
     expect(obj.players).toEqual(expArr);
 
+});
+
+it('should show Popup', () => {
+    const obj = new FaceItClass();
+    const o = {show: false};
+    spyOn(obj, 'getVueAppInstance').and.returnValue(o);
+    obj.showReportPopup(6);
+    expect(o.show).toBe(true);
+});
+
+it('should getVueAppInstance', () => {
+    // @ts-ignore
+    window.ecl_addon_vue_instance = {$children: ['some string']};
+    const obj = new FaceItClass();
+    expect(obj.getVueAppInstance()).toEqual('some string');
+
+    // @ts-ignore
+    delete window.ecl_addon_vue_instance;
+});
+it('should create listener', () => {
+    const obj = {show: false};
+    // @ts-ignore
+    window.ecl_addon_vue_instance = {$children: [obj]};
+
+    // @ts-ignore
+    window.ecl_report_addon_report_click_handler(5);
+
+    expect(obj.show).toEqual(true);
+
+    // @ts-ignore
+    delete window.ecl_addon_vue_instance;
 });
 

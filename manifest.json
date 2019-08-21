@@ -15,6 +15,8 @@
     ],
     "web_accessible_resources": [
       "content_scripts/faceit_event_binding.js",
-      "content_scripts/faceit.js"
+      "content_scripts/faceit.js",
+      "content_scripts/app.css",
+      "content_scripts/app.js"
     ]
 }
