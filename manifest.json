@@ -5,7 +5,8 @@
     "description": "An addon that makes reporting players in ECL (ecl.gg) easier",
     "homepage_url": "https://www.fosefx.com/",  
     "permissions": [
-      "activeTab"
+      "activeTab",
+      "tabs"
     ],
     "content_scripts": [
         {

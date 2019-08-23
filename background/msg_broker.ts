@@ -24,5 +24,10 @@ export async function handleQueryBuilt(data: Report): Promise<MsgRequest<boolean
 export async function sendMsgToECL(req: MsgRequest<Report>): Promise<any> {
     console.log('sendMsgToECL', req);
     // @ts-ignore
-    return browser.runtime.sendMessage(req);
+    const tabs = await browser.tabs.query({
+        active: true
+    });
+
+    // @ts-ignore
+    return browser.tabs.sendMessage(tabs[0].id, req);
 }
