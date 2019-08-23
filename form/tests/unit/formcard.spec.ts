@@ -42,7 +42,7 @@ describe('FormCard', () => {
         },
     });
 
-    wrapper.setData({tab: 1});
+    wrapper.setData({tab: 1, stageTwo: false});
     wrapper.find(MajorForm).vm.$emit('submitted', {
       emailReport: false,
         data: {

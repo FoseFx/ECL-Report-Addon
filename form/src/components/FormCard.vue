@@ -21,34 +21,38 @@
       </v-list-item-content>
     </v-list-item>
 
-    <v-tabs grow v-model="tab" color="warning">
+    <v-tabs grow v-model="tab" color="warning" v-if="!stageTwo">
       <v-tab key="minor">Minor</v-tab>
       <v-tab key="major">Major</v-tab>
     </v-tabs>
 
 
-    <v-tabs-items v-model="tab">
+    <v-tabs-items v-model="tab" v-if="!stageTwo">
       <v-tab-item key="minor">
         <v-card flat>
           <MinorForm></MinorForm>
         </v-card>
       </v-tab-item>
 
-      <v-tab-item key="major">
+      <v-tab-item key="major" v-if="!stageTwo">
         <v-card flat>
           <MajorForm v-on:submitted="onSubmit"></MajorForm>
         </v-card>
       </v-tab-item>
       
     </v-tabs-items>
-
-
+   
+    <iframe 
+      ref="eclframe" 
+      v-bind:class="{'zero-opacity': !stageTwo}" 
+      src="https://report.ecl.gg/"
+      width="100%" 
+      v-bind:height="stageTwo ? '500px' : '1px'">
+    </iframe>
 
     <v-card-actions>
       <v-btn outlined text>Cancel</v-btn>
     </v-card-actions>
-
-    <iframe src="https://report.ecl.gg/" width="100%" height="170px"></iframe>
 
   </v-card>
 </template>
@@ -73,6 +77,8 @@ export default class FormCard extends Vue {
     @Prop() public reportedName!: string;
     @Prop() public email!: string;
 
+    private stageTwo = false;
+
     private tab = 0;
 
     public onSubmit(event: Report) {
@@ -91,8 +97,14 @@ export default class FormCard extends Vue {
         reportedUUID: this.reportedUUID,
         reportedName: this.reportedName,
       }, event);
-      console.log(report);
+      this.stageTwo = true;
       document.dispatchEvent(new CustomEvent('ecl_report_addon_query_built', {detail: report}));
     }
 }
 </script>
+
+<style scoped>
+.zero-opacity {
+  opacity: 0;
+}
+</style>

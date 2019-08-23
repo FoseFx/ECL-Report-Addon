@@ -47,16 +47,26 @@ const el = document.createElement("script");
 el.src = 'data:text/plain;base64,' + btoa(html);
 document.head.appendChild(el);
 
-setTimeout(() => {
-  document.addEventListener('ecl_report_addon_verification', (e) => {
-    console.log('event', e);
-  });
-  console.log('adding ecl listener ...');
-  browser.runtime.onMessage.addListener((req) => {
-    if (req.type === 'REQUEST_REQUEST') {
-       console.log('ecl.gg', req);
-       return Promise.resolve('Not implemented yet');
-    }
-  });
-}, 1000);
 
+
+browser.runtime.onMessage.addListener((req) => {
+  if (req.type === 'REQUEST_REQUEST') {
+      return new Promise((resolve, reject) => {
+        const fn = (e) => {          
+          document.removeEventListener('ecl_report_addon_verification', fn);
+          const pl = req.data;
+          pl.recaptcha = e.detail;
+          sendRequest(pl)
+            .then((resp) => resp.json())
+            .then(resp => resolve(resp))
+            .catch(err => reject(err));
+        };
+        document.addEventListener('ecl_report_addon_verification', fn);
+      });
+  }
+});
+
+function sendRequest(pl) {
+  // todo fetch
+  return Promise.reject('Was sucessfull :P');
+}
