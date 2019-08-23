@@ -50,6 +50,12 @@ document.head.appendChild(el);
 setTimeout(() => {
   document.addEventListener('ecl_report_addon_verification', (e) => {
     console.log('event', e);
+  });
+  browser.runtime.onMessage.addListener((req) => {
+    if (req.type === 'REQUEST_REQUEST') {
+       console.log('ecl.gg', req);
+       return Promise.resolve('Not implemented yet');
+    }
   });  
 }, 1000);
 

@@ -29,3 +29,17 @@ function injectCSS(href) {
     el.href = href;
     document.head.appendChild(el);
 }
+
+document.addEventListener('ecl_report_addon_query_built', (e) => {
+    const report = e.detail;
+    console.log('loader: listener: report', report);
+    const req = {
+        type: 'BUILT_QUERY',
+        data: report
+    };
+    browser.runtime.sendMessage(req).then((...args) => {
+        console.log('loader: promise then:', args);
+    }).catch((...args) => {
+        console.log('loader: promise catch:', args);        
+    });    
+});

@@ -57,7 +57,7 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import MinorForm from './MinorForm.vue';
 import MajorForm from './MajorForm.vue';
-import { Report } from '../main';
+import { Report } from '../types';
 
 @Component({
     components: {
@@ -92,6 +92,7 @@ export default class FormCard extends Vue {
         reportedName: this.reportedName,
       }, event);
       console.log(report);
+      document.dispatchEvent(new CustomEvent('ecl_report_addon_query_built', {detail: report}));
     }
 }
 </script>

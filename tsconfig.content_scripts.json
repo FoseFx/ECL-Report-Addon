@@ -5,12 +5,13 @@
         "preserveConstEnums": true,
         "sourceMap": true,
         "target": "es6",
-        "outDir": "dist/content_scripts",
+        "outDir": "dist",
         "skipLibCheck": true,
         "allowJs": true
     },
     "include": [
-        "content_scripts"
+        "content_scripts",
+        "background"
     ],
     "exclude": [
         "node_modules",
