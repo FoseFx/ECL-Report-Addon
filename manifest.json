@@ -25,6 +25,6 @@
       "content_scripts/app.js"
     ],
     "background": {
-      "scripts": ["msg_broker.js"]
+      "scripts": ["background/msg_broker.js"]
     }
 }

@@ -5,29 +5,24 @@ interface MsgRequest<T> {
     data?: T;
 }
 
-export class MsgBroker {
-    constructor() {
-        console.log('initing');
-        // @ts-ignore
-        browser.runtime.onMessage.addListener(this.handleMessage);
-        console.log('listening');
-    }
-    handleMsg(req: MsgRequest<Report>): Promise<MsgRequest<any>> {
-        console.log('bg: handleMsg', req);
-        switch (req.type) {
-            case 'BUILT_QUERY': return this.handleQueryBuilt(req.data);
-            default:
-        }
-    }
-    async handleQueryBuilt(data: Report): Promise<MsgRequest<boolean|string>> {
-        console.log('handleQueryBuilt', data);
-        return this.sendMsgToECL({type: 'REQUEST_REQUEST', data});
-    }
-    async sendMsgToECL(req: MsgRequest<Report>): Promise<any> {
-        console.log('sendMsgToECL', req);
-        // @ts-ignore
-        return browser.runtime.sendMessage(req);
+
+// @ts-ignore
+browser.runtime.onMessage.addListener(
+    handleMsg
+);
+export function handleMsg(req: MsgRequest<Report>): Promise<MsgRequest<any>> {
+    console.log('bg: handleMsg', req);
+    switch (req.type) {
+        case 'BUILT_QUERY': return handleQueryBuilt(req.data);
+        default:
     }
 }
-
-const i = new MsgBroker();
+export async function handleQueryBuilt(data: Report): Promise<MsgRequest<boolean|string>> {
+    console.log('handleQueryBuilt', data);
+    return sendMsgToECL({type: 'REQUEST_REQUEST', data});
+}
+export async function sendMsgToECL(req: MsgRequest<Report>): Promise<any> {
+    console.log('sendMsgToECL', req);
+    // @ts-ignore
+    return browser.runtime.sendMessage(req);
+}

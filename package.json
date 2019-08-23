@@ -5,11 +5,9 @@
   "main": "index.js",
   "scripts": {
     "build:prod": "rm -rf dist && mkdir dist && npm run build:content_scripts:prod && npm run remove_export && cp manifest.json dist/. && npm run build:build_vue",
-    "build:dev": "rm -rf dist && mkdir dist && npm run build:content_scripts:dev && npm run remove_export && cp manifest.json dist/. && npm run build:build_vue",
-    "build:content_scripts:dev": "tsc -b tsconfig.content_scripts.json",
+    "build:dev": "./build.sh",
     "build:content_scripts:prod": "tsc -b tsconfig.content_scripts.prod.json",
     "build:build_vue": "cd form && npm run build && cp -r dist/js/* ../dist/content_scripts && cp dist/css/* ../dist/content_scripts && cd ..",
-    "remove_export": "sed -i 's/export //' dist/content_scripts/faceit.js",
     "test:cs": "jest --coverage",
     "test": "npm run test:cs && cd form && npm run test:unit && cd ..",
     "lint": "tslint -c tslint.json content_scripts/*.ts",
