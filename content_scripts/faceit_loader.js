@@ -39,7 +39,7 @@ document.addEventListener('ecl_report_addon_query_built', (e) => {
     };
     browser.runtime.sendMessage(req).then((...args) => {
         console.log('loader: promise then:', args);
-    }).catch((...args) => {
-        console.log('loader: promise catch:', args);
+    }).catch((arg) => {
+        console.log('loader: promise catch:', arg);
     });
 });

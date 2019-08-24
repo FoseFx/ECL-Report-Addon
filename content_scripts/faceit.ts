@@ -55,7 +55,6 @@ export class FaceItClass {
 
     initDetectElements(route: string) {
         console.log('initdetectelements');
-        console.log('isroom', this.isRoomRoute(route));
 
         if (this.isRoomRoute(route)) { // user routed to /room/
             const interval = setInterval(() => {
@@ -74,7 +73,6 @@ export class FaceItClass {
 
     detectElements(): boolean {
         const nodes = document.querySelectorAll('match-team-member-v2');
-        console.log(nodes);
 
         if (nodes.length === 0) {
             return false;
@@ -98,7 +96,6 @@ export class FaceItClass {
             return false;
         }
         const data = this.getDataAboutElementFromAngular(firstElement);
-        console.log('data', data);
 
         return data.currentMatch.match.organizerId === ECL_ORGA_ID;
     }
@@ -139,7 +136,6 @@ export class FaceItClass {
             players.push(player);
         }
         this.players = players;
-        console.log(players);
 
     }
 
@@ -152,7 +148,6 @@ export class FaceItClass {
     }
 
     showReportPopup(index: number) {
-        console.log(index);
         // todo
         const app = this.getVueAppInstance();
         app.show = true;
