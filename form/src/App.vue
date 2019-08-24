@@ -6,6 +6,7 @@
       <v-row align="center" justify="center">
           <v-col cols="12" sm="10" md="7" 	lg="4" >
             <FormCard
+              v-on:close="show = false"
               v-bind:division="division"
               v-bind:complaiant-u-u-i-d="complaiantUUID"
               v-bind:complaiant-name="complaiantName"

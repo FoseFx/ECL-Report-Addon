@@ -6,7 +6,8 @@
     "homepage_url": "https://www.fosefx.com/",  
     "permissions": [
       "activeTab",
-      "tabs"
+      "tabs",
+      "webRequest"
     ],
     "content_scripts": [
         {

@@ -37,9 +37,11 @@ document.addEventListener('ecl_report_addon_query_built', (e) => {
         type: 'BUILT_QUERY',
         data: report
     };
-    browser.runtime.sendMessage(req).then((...args) => {
-        console.log('loader: promise then:', args);
+    browser.runtime.sendMessage(req).then((arg) => {
+        console.log('loader: promise then:', arg);
+        document.dispatchEvent(new CustomEvent('ecl_report_addon_fetch_success', {detail: arg}));
     }).catch((arg) => {
         console.log('loader: promise catch:', arg);
+        document.dispatchEvent(new CustomEvent('ecl_report_addon_fetch_failed', {detail: arg}));
     });
 });

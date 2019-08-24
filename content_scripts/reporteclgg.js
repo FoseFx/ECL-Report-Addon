@@ -3,7 +3,7 @@ const secret = '6Lcm82UUAAAAAJ5lLek01opD2mw59XfcFzfvs0hP';
 const html = `
 console.log('injected');
 console.log('is iframe', window.top !== window.self);
-if (true) {// (window.top !== window.self) {
+if (window.top !== window.self) {
   let h = \`
   <html>
   <head>
@@ -48,7 +48,6 @@ el.src = 'data:text/plain;base64,' + btoa(html);
 document.head.appendChild(el);
 
 
-
 browser.runtime.onMessage.addListener((req) => {
   if (req.type === 'REQUEST_REQUEST') {
       return new Promise((resolve, reject) => {
@@ -58,8 +57,8 @@ browser.runtime.onMessage.addListener((req) => {
           pl.recaptcha = e.detail;
           sendRequest(pl)
             .then((resp) => resp.json())
-            .then(resp => resolve(resp))
-            .catch(err => reject(err));
+            .then((resp) => resolve(resp))
+            .catch((err) => reject(err));
         };
         document.addEventListener('ecl_report_addon_verification', fn);
       });
@@ -67,6 +66,8 @@ browser.runtime.onMessage.addListener((req) => {
 });
 
 function sendRequest(pl) {
-  // todo fetch
-  return Promise.reject('Was sucessfull :P');
+  if (content) { // content.fetch is used by firefox 58 onwards to make request on behalf of the page
+    return content.fetch('https://jsonplaceholder.typicode.com/todos/1');
+  }
+  return fetch('https://jsonplaceholder.typicode.com/todos/1'); // chome does this by default
 }
