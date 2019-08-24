@@ -16,13 +16,14 @@ interface AngualarPlayerElementInfo {
     };
     currentMatch: {
         match: {
-            organizerId: string
+            organizerId: string,
+            name: string
         }
     };
 }
 
 interface VueAppInstance {
-    division: number;
+    division: string;
     complaiantUUID: string;
     complaiantName: string;
     reportedUUID: string;
@@ -37,6 +38,7 @@ export class FaceItClass {
 
     currentInterval = -1;
     players: Player[] = null;
+    roomName = '';
 
     init() {
         // @ts-ignore
@@ -96,8 +98,12 @@ export class FaceItClass {
             return false;
         }
         const data = this.getDataAboutElementFromAngular(firstElement);
-
-        return data.currentMatch.match.organizerId === ECL_ORGA_ID;
+        const res = data.currentMatch.match.organizerId === ECL_ORGA_ID;
+        if (res === false) {
+            return false;
+        }
+        this.roomName = data.currentMatch.match.name;
+        return true;
     }
 
     // this will add the ECL-Report button to each player in the match
@@ -148,14 +154,33 @@ export class FaceItClass {
     }
 
     showReportPopup(index: number) {
-        // todo
+        const user = this.players.filter(p => p.isUser)[0];
+        const player = this.players[index];
         const app = this.getVueAppInstance();
         app.show = true;
+        app.reportedName = player.name;
+        app.reportedUUID = player.guid;
+        app.complaiantName = user.name;
+        app.complaiantUUID = user.guid;
+        app.division = this.getDivision();
     }
 
     getVueAppInstance(): VueAppInstance {
         // @ts-ignore
         return window.ecl_addon_vue_instance.$children[0];
+    }
+
+    getDivision(): string {
+        if (this.roomName.toLowerCase().search('aim') !== -1) {
+            return 'aim';
+        } else if (this.roomName.toLowerCase().search('legends') !== -1) {
+            return 'legends';
+        }
+        const match = this.roomName.match(/^ECL Division (\d+)/);
+        if (match === null) {
+            return '';
+        }
+        return match[1];
     }
 
 }

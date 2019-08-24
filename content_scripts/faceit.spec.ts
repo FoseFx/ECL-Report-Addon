@@ -162,10 +162,22 @@ it('should buildPlayersArray', () => {
 
 it('should show Popup', () => {
     const obj = new FaceItClass();
+    obj.players = [
+        {isUser: true, guid: 'user1', name: 'nick1'},
+        {isUser: false, guid: 'user2', name: 'nick2'}
+    ];
+    obj.roomName = 'ECL Division 1 (27000 ELO MAX';
     const o = {show: false};
     spyOn(obj, 'getVueAppInstance').and.returnValue(o);
-    obj.showReportPopup(6);
-    expect(o.show).toBe(true);
+    obj.showReportPopup(1);
+    expect(o).toEqual({
+        show: true,
+        division: '1',
+        reportedName: 'nick2',
+        reportedUUID: 'user2',
+        complaiantName: 'nick1',
+        complaiantUUID: 'user1'
+    });
 });
 
 it('should getVueAppInstance', () => {
@@ -177,17 +189,20 @@ it('should getVueAppInstance', () => {
     // @ts-ignore
     delete window.ecl_addon_vue_instance;
 });
-it('should create listener', () => {
-    const obj = {show: false};
-    // @ts-ignore
-    window.ecl_addon_vue_instance = {$children: [obj]};
 
-    // @ts-ignore
-    window.ecl_report_addon_report_click_handler(5);
-
-    expect(obj.show).toEqual(true);
-
-    // @ts-ignore
-    delete window.ecl_addon_vue_instance;
+it('should get division', () => {
+    const obj = new FaceItClass();
+    obj.roomName = 'ECL Division 3';
+    expect(obj.getDivision()).toEqual('3');
+    obj.roomName = 'ECL Division 333';
+    expect(obj.getDivision()).toEqual('333');
+    obj.roomName = 'ECL Division 1 (2700 ELO MAX)';
+    expect(obj.getDivision()).toEqual('1');
+    obj.roomName = 'ECL - AIM LADDER';
+    expect(obj.getDivision()).toEqual('aim');
+    obj.roomName = 'LEGENDS - 2700 ELO to enter';
+    expect(obj.getDivision()).toEqual('legends');
+    obj.roomName = 'lmao saoidjiuashduih asd jasik d67890';
+    expect(obj.getDivision()).toEqual('');
 });
 

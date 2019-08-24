@@ -78,7 +78,7 @@ import { Report } from '../types';
     },
 })
 export default class FormCard extends Vue {
-    @Prop() public division!: number;
+    @Prop() public division!: string;
     @Prop() public complaiantUUID!: string;
     @Prop() public complaiantName!: string;
     @Prop() public reportedUUID!: string;
@@ -101,7 +101,7 @@ export default class FormCard extends Vue {
         email: this.email,
         emailPub: false,
         data: {
-          division: this.division + '',
+          division: this.division,
           matchroomLink: document.location.href,
         },
         reportedUUID: this.reportedUUID,

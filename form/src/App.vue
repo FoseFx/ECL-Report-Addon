@@ -33,7 +33,7 @@ import FormCard from './components/FormCard.vue';
   },
 })
 export default class App extends Vue {
-  public division: number = -1;
+  public division: string = '';
   public complaiantUUID: string = '';
   public complaiantName: string = '';
   public reportedUUID: string = '';
