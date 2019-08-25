@@ -61,8 +61,9 @@ describe('detectElements', () => {
         expect(res).toEqual(true);
         expect(spy).toHaveBeenCalled();
     });
-    it('should call morphing functions when in ECLRoom', () => {
+    it('should call morphing functions when in ECLRoom and logged in', () => {
         const obj = new FaceItClass();
+        spyOn(obj, 'getEmail').and.returnValue('some@test.com');
         const spy = spyOn(obj, 'isECLRoom').and.returnValue(true);
         const spy2 = spyOn(obj, 'addReportButtons');
         const spy3 = spyOn(obj, 'buildPlayersArray');
@@ -116,11 +117,11 @@ it('isECLRoom', () => {
     expect(obj.isECLRoom(fakeNodes)).toBe(false);
 
     spy.and.returnValue({
-        currentMatch: {match: {organizerId: ECL_ORGA_ID}}
+        currentMatch: {match: {organizerId: ECL_ORGA_ID, entity: {name: 'some name'}}}
     });
 
     expect(obj.isECLRoom(fakeNodes)).toBe(true);
-
+    expect(obj.roomName).toEqual('some name');
     // @ts-ignore
     expect(obj.isECLRoom([])).toBe(false);
 });
@@ -167,6 +168,7 @@ it('should show Popup', () => {
         {isUser: false, guid: 'user2', name: 'nick2'}
     ];
     obj.roomName = 'ECL Division 1 (27000 ELO MAX';
+    spyOn(obj, 'getEmail').and.returnValue('somemail@test.com');
     const o = {show: false};
     spyOn(obj, 'getVueAppInstance').and.returnValue(o);
     obj.showReportPopup(1);
@@ -176,7 +178,8 @@ it('should show Popup', () => {
         reportedName: 'nick2',
         reportedUUID: 'user2',
         complaiantName: 'nick1',
-        complaiantUUID: 'user1'
+        complaiantUUID: 'user1',
+        email: 'somemail@test.com'
     });
 });
 
@@ -204,5 +207,22 @@ it('should get division', () => {
     expect(obj.getDivision()).toEqual('legends');
     obj.roomName = 'lmao saoidjiuashduih asd jasik d67890';
     expect(obj.getDivision()).toEqual('');
+});
+
+it('should get email', () => {
+    const obj = new FaceItClass();
+    document.body.innerHTML = ``;
+    expect(obj.getEmail()).toEqual(null);
+
+    document.body.innerHTML = `<profile></profile>`;
+    // @ts-ignore
+    window.angular = {element: () => ({inheritedData: () => ({$profileController: {userStore: {currentUser: {email: 'test@test.com'}}}})})};
+    expect(obj.getEmail()).toEqual('test@test.com');
+
+    // @ts-ignore
+    delete window.angular;
+
+    expect(obj.getEmail()).toEqual(null);
+
 });
 

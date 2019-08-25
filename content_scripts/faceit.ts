@@ -17,7 +17,9 @@ interface AngualarPlayerElementInfo {
     currentMatch: {
         match: {
             organizerId: string,
-            name: string
+            entity: {
+                name: string
+            }
         }
     };
 }
@@ -80,8 +82,10 @@ export class FaceItClass {
             return false;
         }
         if (this.isECLRoom(nodes)) {
-            this.buildPlayersArray(nodes);
-            this.addReportButtons(nodes);
+            if (this.getEmail() !== null) { // must be logged in to be able to report sb.
+                this.buildPlayersArray(nodes);
+                this.addReportButtons(nodes);
+            }
         }
         return true;
     }
@@ -102,7 +106,8 @@ export class FaceItClass {
         if (res === false) {
             return false;
         }
-        this.roomName = data.currentMatch.match.name;
+        console.log(data.currentMatch);
+        this.roomName = data.currentMatch.match.entity.name;
         return true;
     }
 
@@ -163,6 +168,7 @@ export class FaceItClass {
         app.complaiantName = user.name;
         app.complaiantUUID = user.guid;
         app.division = this.getDivision();
+        app.email = this.getEmail();
     }
 
     getVueAppInstance(): VueAppInstance {
@@ -181,6 +187,21 @@ export class FaceItClass {
             return '';
         }
         return match[1];
+    }
+
+    // null when not logged in
+    getEmail(): string|null {
+        const profileElement = document.querySelector('profile');
+        if (profileElement === null) {
+            return null;
+        }
+        try {
+            // @ts-ignore
+            return angular.element(profileElement).inheritedData().$profileController.userStore.currentUser.email;
+        } catch (e) {
+            console.error(e);
+            return null;
+        }
     }
 
 }

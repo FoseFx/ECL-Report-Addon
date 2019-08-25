@@ -3,7 +3,7 @@
     class="mx-auto"
     outlined
   >
-    <div v-if="!done">
+    <div v-if="!done && division !== 'legends'">
         <v-list-item three-line>
           <v-list-item-content>
             <div class="overline mb-4">Report</div>
@@ -53,6 +53,9 @@
       </iframe>
 
     </div>
+
+    <v-card-title v-if="division === 'legends'">This addon does not support the Legends Division</v-card-title>
+
 
     <v-card-title v-if="done">Done</v-card-title>
     <v-card-text v-if="done && error">An error occured making the request... {{error}}</v-card-text>
