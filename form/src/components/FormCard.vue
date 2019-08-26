@@ -31,7 +31,7 @@
       <v-tabs-items v-model="tab" v-if="!stageTwo">
         <v-tab-item key="minor">
           <v-card flat>
-            <MinorForm></MinorForm>
+            <MinorForm v-on:submitted="onSubmit"></MinorForm>
           </v-card>
         </v-tab-item>
 
@@ -102,7 +102,6 @@ export default class FormCard extends Vue {
         complaiantName: this.complaiantName,
         complaiantUUID: this.complaiantUUID,
         email: this.email,
-        emailPub: false,
         data: {
           division: this.division,
           matchroomLink: document.location.href,
@@ -110,6 +109,9 @@ export default class FormCard extends Vue {
         reportedUUID: this.reportedUUID,
         reportedName: this.reportedName,
       }, event);
+      if (type === 'major') {
+        report.emailPub = false;
+      }
       this.stageTwo = true;
       document.dispatchEvent(new CustomEvent('ecl_report_addon_query_built', {detail: report}));
       this.addListeners();

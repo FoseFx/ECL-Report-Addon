@@ -55,7 +55,7 @@
         <v-switch color="warning" v-model="emailReport" label="Email me updates on this case"></v-switch>
 
         <v-btn outlined color="warning" class="save-btn" large v-bind:disabled="!valid" @click="onSubmit">
-          <v-icon left>mdi-pencil</v-icon>Save
+          Save
         </v-btn>
       </v-container>
   </v-form>

@@ -12,8 +12,8 @@
     <!-- In Game -->
     <v-container v-if="where === 'in-game'">
         <p>Offences/Reason</p>
-        <p style="color: red">Please select at least one</p>
-        <v-container fluid>
+        <p style="color: red" v-if="offenceInvalid">Please select at least one</p>
+        <v-container @click="evalCheckboxes()">
             <v-checkbox v-model="offences['rage']" color="warning" label="Rage"></v-checkbox>
             <v-checkbox v-model="offences['flaming']" color="warning" label="Flaming"></v-checkbox>
             <v-checkbox v-model="offences['not-communicating']" color="warning" label="Not communicating"></v-checkbox>
@@ -24,7 +24,7 @@
             <v-checkbox v-model="offences['playing-alone-not-as-a-team']" color="warning" label="Playing alone, not as a team"></v-checkbox>
         </v-container>
 
-        <v-container fluid>
+        <v-container>
             <p>Additional Info</p>
             <v-row v-for="(obj, index) in additionalData" v-bind:key="index">
                 <v-row>
@@ -55,19 +55,45 @@
                     </v-col>
                 </v-row>
             </v-row>
-            <v-btn text @click="additionalData.push({additionalDataDetail: '', additionalDataRound: ''})">
+            <v-btn color="warning" text @click="additionalData.push({additionalDataDetail: '', additionalDataRound: ''})">
                 <v-icon left>mdi-plus</v-icon> add more
             </v-btn>
         </v-container>
 
-        <!-- TODO Proof -->
+        <v-container>
+            <p>Proof (optional)</p>
+            <v-row v-for="(_, index) in proof" v-bind:key="index">
+                <v-col cols="10">
+                    <v-text-field color="warning" label="Link to trusted source" required :rules="urlRules">
+
+                    </v-text-field>
+                </v-col>
+                <v-col cols="1">
+                    <v-btn text height="65%" @click="proof.splice(index, 1)">
+                        <v-icon >mdi-minus</v-icon>
+                    </v-btn>
+                </v-col>
+            </v-row>
+            <v-btn text @click="proof.push({links: ''})" color="warning">
+                <v-icon left>mdi-plus</v-icon> add more
+            </v-btn>
+        </v-container>
+
 
     </v-container>
+
+    <v-container>
+        <v-btn v-bind:disabled="!valid || offenceInvalid" @click="onSubmit" large outlined color="warning">
+            Submit
+        </v-btn>
+    </v-container>
+
 </v-form>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
+import { URLREGEX } from '../main';
 
 interface AdditionalDatum {
     additionalDataRound: string;
@@ -89,14 +115,70 @@ export default class MinorForm extends Vue {
         'not-listening-to-strats': false,
         'playing-alone-not-as-a-team': false,
     };
+    private offenceInvalid = false;
     private additionalData: AdditionalDatum[] = [{additionalDataRound: '', additionalDataDetail: ''}];
+    private proof: string[] = [''];
+
+    private urlRules: Array<(s: string) => boolean|string> = [
+        (v) => !!v || 'When added it must be filled out',
+        (v) => URLREGEX.test(v) || 'Not a valid URL',
+    ];
 
     private onSubmit() {
+        if (this.where === 'in-game') {
+            this.onSubmitInGame();
+        }
+    }
 
+    private onSubmitInGame() {
+        const offences = this.evalCheckboxes();
+        // @ts-ignore
+        this.$refs.form.validate();
+        if (!this.valid || this.offenceInvalid) {
+            return;
+        }
+        const proofLink = this.proof.splice(0, 1)[0] || ''; // take first of proof
+
+        const additionalData: Array<{round: number, description: string}> = [];
+        for (const obj of this.additionalData) {
+            additionalData.push({
+                round: +obj.additionalDataRound,
+                description: obj.additionalDataDetail,
+            });
+        }
+        const pl = {
+            data: {
+                where: this.where,
+                offences,
+                proofLink,
+                additionalLinksData: this.proof,
+                additionalData,
+            },
+        };
+
+        this.$emit('submitted', pl);
+        // @ts-ignore
+        this.$refs.form.reset();
+    }
+
+    private evalCheckboxes(): string[] {
+        const arr: string[] = [];
+        for (const key in this.offences) {
+            if (this.offences.hasOwnProperty(key)) {
+                // @ts-ignore
+                if (this.offences[key] === true) {
+                    arr.push(key);
+                }
+            }
+        }
+        this.offenceInvalid = arr.length === 0;
+        return arr;
     }
 }
 </script>
 
 <style lang="scss" scoped>
-
+.v-input--checkbox {
+    margin-top: 0!important;
+}
 </style>
