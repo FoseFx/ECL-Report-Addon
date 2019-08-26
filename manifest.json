@@ -12,11 +12,11 @@
     "content_scripts": [
         {
           "matches": ["https://www.faceit.com/*"],
-          "js": ["content_scripts/faceit_loader.js"]
+          "js": ["browser-polyfill.min.js", "content_scripts/faceit_loader.js"]
         },
         {
           "matches": ["https://report.ecl.gg/*"],
-          "js": ["content_scripts/reporteclgg.js"],
+          "js": ["browser-polyfill.min.js", "content_scripts/reporteclgg.js"],
           "all_frames": true
         }
     ],
@@ -27,6 +27,6 @@
       "content_scripts/app.js"
     ],
     "background": {
-      "scripts": ["background/msg_broker.js"]
+      "scripts": ["browser-polyfill.min.js", "background/msg_broker.js"]
     }
 }

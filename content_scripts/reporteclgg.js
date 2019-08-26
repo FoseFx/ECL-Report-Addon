@@ -66,7 +66,7 @@ browser.runtime.onMessage.addListener((req) => {
 });
 
 function sendRequest(pl) {
-  if (content) { // content.fetch is used by firefox 58 onwards to make request on behalf of the page
+  if (typeof content !== 'undefined') { // content.fetch is used by firefox 58 onwards to make request on behalf of the page
     return content.fetch('https://jsonplaceholder.typicode.com/todos/1');
   }
   return fetch('https://jsonplaceholder.typicode.com/todos/1'); // chome does this by default
