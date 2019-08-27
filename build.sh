@@ -1,3 +1,5 @@
+#!/bin/bash
+
 rm -rf dist && # clean old dist folder
 mkdir dist && # make new dist folder
 tsc -b tsconfig.content_scripts.$1.json && # transpile content_scripts and msg_broker
@@ -11,3 +13,13 @@ npm run build && # build form
 cp -r dist/js/* ../dist/content_scripts && # copy files to the right place
 cp dist/css/* ../dist/content_scripts &&
 cd ..
+
+if [ "$1" == "prod" ]
+    then
+        for folder in "content_scripts" "background"; do
+            echo "Compressing $folder"
+            for filename in ./dist/$folder/*.js; do
+                npx terser --compress --mangle -o $filename -- $filename
+            done
+        done
+fi
