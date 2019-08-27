@@ -130,14 +130,19 @@ export default class MinorForm extends Vue {
         }
     }
 
-    private onSubmitInGame() {
+    private onSubmitInGame(): boolean {
         const offences = this.evalCheckboxes();
         // @ts-ignore
         this.$refs.form.validate();
         if (!this.valid || this.offenceInvalid) {
-            return;
+            return false;
         }
         const proofLink = this.proof.splice(0, 1)[0] || ''; // take first of proof
+
+        const additionalLinksData = [];
+        for (const link of this.proof) {
+            additionalLinksData.push({link});
+        }
 
         const additionalData: Array<{round: number, description: string}> = [];
         for (const obj of this.additionalData) {
@@ -151,7 +156,7 @@ export default class MinorForm extends Vue {
                 where: this.where,
                 offences,
                 proofLink,
-                additionalLinksData: this.proof,
+                additionalLinksData,
                 additionalData,
             },
         };
@@ -159,6 +164,7 @@ export default class MinorForm extends Vue {
         this.$emit('submitted', pl);
         // @ts-ignore
         this.$refs.form.reset();
+        return true;
     }
 
     private evalCheckboxes(): string[] {
