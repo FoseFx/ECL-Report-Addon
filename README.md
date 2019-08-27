@@ -32,31 +32,8 @@ Run `npm test` to run all tests and to generate a coverage report (open using `f
 ## Linting
 Code style and readability is important! Use `npm run lint` to check if your code is compliant, if not try `npm run lint:fix` and/or manualy fix it.
 
-
 # TODO
-```
-Needed fields:
-
-Major fault:
-- offense => checkboxes
-- division => document.querySelector("div.fi-navbar__header.--interactive").getAttribute("title")
-- matchroom => document.loaction.href
-- player => "https://www.faceit.com" + document.querySelector("div.match-team-member__details__name > a").getAttribute("href")
-- explain => textarea
-- additional info => click to add (input)
-  round | descr
-- screenshots or video => click to add (input)
-- captcha LATER
-- updates per mail? => checkbox
-
-Minor fault:
-- where => switch *ing* <=> chat
-- division => document.querySelector("div.fi-navbar__header.--interactive").getAttribute("title")
-- matchroom => document.loaction.href
-- player => "https://www.faceit.com" + document.querySelector("div.match-team-member__details__name > a").getAttribute("href")
-- reason => textbox
-- screenshot => input
-- captcha
-
-
-```
+- Finish MinorForm
+- Going live
+- Dev: Windows support
+- Bug fixes
