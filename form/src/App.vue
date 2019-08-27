@@ -4,10 +4,11 @@
   <v-content>
     <v-container class="fill-height" fluid>
       <v-row align="center" justify="center">
-          <v-col cols="12" sm="10" md="7" 	lg="4" >
+          <v-col cols="12" sm="10" md="8" lg="6">
             <FormCard
               v-on:close="show = false"
               v-bind:division="division"
+              v-bind:avatar="avatarUrl"
               v-bind:complaiant-u-u-i-d="complaiantUUID"
               v-bind:complaiant-name="complaiantName"
               v-bind:reported-u-u-i-d="reportedUUID"
@@ -38,6 +39,7 @@ export default class App extends Vue {
   public complaiantName: string = '';
   public reportedUUID: string = '';
   public reportedName: string = '';
+  public avatarUrl: string = '';
   public email: string = '';
   public show = false;
 }

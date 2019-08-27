@@ -6,13 +6,15 @@ interface Player {
     name: string;
     guid: string;
     isUser: boolean;
+    avatarUrl: string;
 }
 
 interface AngualarPlayerElementInfo {
     currentUserGuid: string;
     teamMember: {
         id: string;
-        nickname: string
+        nickname: string;
+        avatar: string;
     };
     currentMatch: {
         match: {
@@ -32,6 +34,7 @@ interface VueAppInstance {
     reportedName: string;
     email: string;
     show: boolean;
+    avatarUrl: string;
 }
 
 
@@ -142,7 +145,8 @@ export class FaceItClass {
             const player: Player = {
                 guid: data.teamMember.id,
                 name: data.teamMember.nickname,
-                isUser: data.currentUserGuid === data.teamMember.id
+                isUser: data.currentUserGuid === data.teamMember.id,
+                avatarUrl: data.teamMember.avatar
             };
             players.push(player);
         }
@@ -167,6 +171,7 @@ export class FaceItClass {
         app.reportedUUID = player.guid;
         app.complaiantName = user.name;
         app.complaiantUUID = user.guid;
+        app.avatarUrl = player.avatarUrl;
         app.division = this.getDivision();
         app.email = this.getEmail();
     }

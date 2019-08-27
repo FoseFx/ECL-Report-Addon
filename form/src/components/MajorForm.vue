@@ -17,6 +17,7 @@
 
         <p>Subject</p>
         <v-textarea
+          color="warning"
           outlined
           label="Subject"
           v-model="subject"
@@ -31,7 +32,8 @@
           v-for="(obj, index) in additionalLinksData" 
           v-bind:key="index">
           <v-col cols="11">
-            <v-text-field  
+            <v-text-field
+              color="warning"
               label="Link to trusted source"
               :mandatory="true"
               outlined

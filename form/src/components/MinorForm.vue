@@ -33,6 +33,7 @@
                 <v-row>
                     <v-col cols="3">
                         <v-text-field
+                            color="warning"
                             label="Round"
                             :mandatory="true"
                             outlined
@@ -43,6 +44,7 @@
                     </v-col>
                     <v-col cols="7">
                         <v-text-field
+                            color="warning"
                             label="Description"
                             :mandatory="true"
                             outlined

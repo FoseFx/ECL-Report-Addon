@@ -12,10 +12,10 @@
           </v-list-item-content>
 
           <v-list-item-avatar
-            tile
             size="80"
-            color="grey"
-           ></v-list-item-avatar>
+            color="grey">
+            <img v-if="avatar" v-bind:src="avatar">
+           </v-list-item-avatar>
       </v-list-item>
       <v-list-item>
         <v-list-item-content>
@@ -87,6 +87,7 @@ export default class FormCard extends Vue {
     @Prop() public reportedUUID!: string;
     @Prop() public reportedName!: string;
     @Prop() public email!: string;
+    @Prop() public avatar!: string;
 
     private stageTwo = false;
     private done = false;
