@@ -9,22 +9,26 @@
         </v-radio-group>
     </v-container>
 
-    <!-- In Game -->
-    <v-container v-if="where === 'in-game'">
+    <v-container v-if="where !== ''">
         <p>Offences/Reason</p>
         <p style="color: red" v-if="offenceInvalid">Please select at least one</p>
         <v-container @click="evalCheckboxes()">
             <v-checkbox v-model="offences['rage']" color="warning" label="Rage"></v-checkbox>
             <v-checkbox v-model="offences['flaming']" color="warning" label="Flaming"></v-checkbox>
-            <v-checkbox v-model="offences['not-communicating']" color="warning" label="Not communicating"></v-checkbox>
-            <v-checkbox v-model="offences['afk-ing']" color="warning" label="AFK-ing"></v-checkbox>
-            <v-checkbox v-model="offences['muting-all-teammates']" color="warning" label="Muting all teammates"></v-checkbox>
-            <v-checkbox v-model="offences['force-buying']" color="warning" label="Force-buy"></v-checkbox>
-            <v-checkbox v-model="offences['not-listening-to-strats']" color="warning" label="Not listening to stats"></v-checkbox>
-            <v-checkbox v-model="offences['playing-alone-not-as-a-team']" color="warning" label="Playing alone, not as a team"></v-checkbox>
+
+            <!-- In game -->
+            <v-checkbox v-if="where === 'in-game'" v-model="offences['not-communicating']" color="warning" label="Not communicating"></v-checkbox>
+            <v-checkbox v-if="where === 'in-game'" v-model="offences['afk-ing']" color="warning" label="AFK-ing"></v-checkbox>
+            <v-checkbox v-if="where === 'in-game'" v-model="offences['muting-all-teammates']" color="warning" label="Muting all teammates"></v-checkbox>
+            <v-checkbox v-if="where === 'in-game'" v-model="offences['force-buying']" color="warning" label="Force-buy"></v-checkbox>
+            <v-checkbox v-if="where === 'in-game'" v-model="offences['not-listening-to-strats']" color="warning" label="Not listening to stats"></v-checkbox>
+            <v-checkbox v-if="where === 'in-game'" v-model="offences['playing-alone-not-as-a-team']" color="warning" label="Playing alone, not as a team"></v-checkbox>
+            <!-- matchoom -->
+            <v-checkbox v-if="where === 'matchroom-chat'" v-model="offences['spamming']" color="warning" label="Spamming"></v-checkbox>
+            <v-checkbox v-if="where === 'matchroom-chat'" v-model="offences['offensive-language']" color="warning" label="Offensive language"></v-checkbox>
         </v-container>
 
-        <v-container>
+        <v-container v-if="where === 'in-game'">
             <p>Additional Info</p>
             <v-row v-for="(obj, index) in additionalData" v-bind:key="index">
                 <v-row>
@@ -61,7 +65,7 @@
         </v-container>
 
         <v-container>
-            <p>Proof (optional)</p>
+            <p>Proof</p>
             <v-row v-for="(_, index) in proof" v-bind:key="index">
                 <v-col cols="10">
                     <v-text-field color="warning" label="Link to trusted source" required :rules="urlRules">
@@ -69,7 +73,7 @@
                     </v-text-field>
                 </v-col>
                 <v-col cols="1">
-                    <v-btn text height="65%" @click="proof.splice(index, 1)">
+                    <v-btn text v-if="index !== 0" height="65%" @click="proof.splice(index, 1)">
                         <v-icon >mdi-minus</v-icon>
                     </v-btn>
                 </v-col>
@@ -114,6 +118,8 @@ export default class MinorForm extends Vue {
         'force-buying': false,
         'not-listening-to-strats': false,
         'playing-alone-not-as-a-team': false,
+        'spamming': false,
+        'offensive-language': false,
     };
     private offenceInvalid = false;
     private additionalData: AdditionalDatum[] = [{additionalDataRound: '', additionalDataDetail: ''}];
@@ -124,33 +130,25 @@ export default class MinorForm extends Vue {
         (v) => URLREGEX.test(v) || 'Not a valid URL',
     ];
 
-    private onSubmit() {
-        if (this.where === 'in-game') {
-            this.onSubmitInGame();
-        }
-    }
-
-    private onSubmitInGame(): boolean {
-        const offences = this.evalCheckboxes();
+    private onSubmit(): boolean {
+        this.evalCheckboxes();
         // @ts-ignore
         this.$refs.form.validate();
         if (!this.valid || this.offenceInvalid) {
             return false;
         }
-        const proofLink = this.proof.splice(0, 1)[0] || ''; // take first of proof
-
-        const additionalLinksData = [];
-        for (const link of this.proof) {
-            additionalLinksData.push({link});
+        if (this.where === 'in-game') {
+            return this.onSubmitInGame();
+        } else if (this.where === 'matchroom-chat') {
+            return this.onSubmitMatchroom();
         }
+        return false;
+    }
 
-        const additionalData: Array<{round: number, description: string}> = [];
-        for (const obj of this.additionalData) {
-            additionalData.push({
-                round: +obj.additionalDataRound,
-                description: obj.additionalDataDetail,
-            });
-        }
+    private onSubmitInGame(): boolean {
+        const offences = this.evalCheckboxes();
+        const {proofLink, additionalLinksData} = this.evalLinks();
+        const additionalData = this.evalAdditionalData();
         const pl = {
             data: {
                 where: this.where,
@@ -160,11 +158,47 @@ export default class MinorForm extends Vue {
                 additionalData,
             },
         };
-
         this.$emit('submitted', pl);
         // @ts-ignore
         this.$refs.form.reset();
         return true;
+    }
+
+    private onSubmitMatchroom(): boolean {
+        const offences = this.evalCheckboxes();
+        const {proofLink, additionalLinksData} = this.evalLinks();
+        const pl = {
+            data: {
+                where: this.where,
+                offences,
+                proofLink,
+                additionalLinksData,
+            },
+        };
+        this.$emit('submitted', pl);
+        // @ts-ignore
+        this.$refs.form.reset();
+        return true;
+    }
+
+    private evalLinks() {
+        const proofLink = this.proof.splice(0, 1)[0]; // take first of proof
+        const additionalLinksData = [];
+        for (const link of this.proof) {
+            additionalLinksData.push({link});
+        }
+        return {proofLink, additionalLinksData};
+    }
+
+    private evalAdditionalData() {
+        const additionalData: Array<{round: number, description: string}> = [];
+        for (const obj of this.additionalData) {
+            additionalData.push({
+                round: +obj.additionalDataRound,
+                description: obj.additionalDataDetail,
+            });
+        }
+        return additionalData;
     }
 
     private evalCheckboxes(): string[] {

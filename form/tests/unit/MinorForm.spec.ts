@@ -33,46 +33,106 @@ describe('MinorForm.vue', () => {
     });
 
     it('should it should select right submit function', () => {
+        wrapper.vm.$refs.form = {
+            validate: () => ({}),
+            reset: () => ({}),
+        } as unknown as MinorForm;
+        // @ts-ignore
+        spyOn(wrapper.vm, 'evalCheckboxes');
         // @ts-ignore
         const inGSpy = spyOn(wrapper.vm, 'onSubmitInGame');
-        wrapper.setData({where: 'matchroom-chat'});
+        // @ts-ignore
+        const mrSpy = spyOn(wrapper.vm, 'onSubmitMatchroom');
+        wrapper.setData({where: 'matchroom-chat', valid: true, offenceInvalid: false});
         // @ts-ignore
         wrapper.vm.onSubmit();
         expect(inGSpy).not.toHaveBeenCalled();
-        wrapper.setData({where: 'in-game'});
+        expect(mrSpy).toHaveBeenCalled();
+        inGSpy.calls.reset();
+        mrSpy.calls.reset();
+        wrapper.setData({where: 'in-game', valid: true, offenceInvalid: false});
         // @ts-ignore
         wrapper.vm.onSubmit();
         expect(inGSpy).toHaveBeenCalled();
+        expect(mrSpy).not.toHaveBeenCalled();
+
+        // invalid
+
+        wrapper.setData({where: 'in-game', valid: false, offenceInvalid: false});
+        // @ts-ignore
+        expect(wrapper.vm.onSubmit()).toEqual(false);
+        wrapper.setData({where: 'in-game', valid: true, offenceInvalid: true});
+        // @ts-ignore
+        expect(wrapper.vm.onSubmit()).toEqual(false);
+
+    });
+
+    it('should evalLinks', () => {
+        wrapper.setData({proof: ['first url', 'second url', 'third url']});
+        // @ts-ignore
+        expect(wrapper.vm.evalLinks()).toEqual(
+            {
+                proofLink: 'first url',
+                additionalLinksData: [
+                    {link: 'second url'},
+                    {link: 'third url'},
+                ],
+            },
+        );
+    });
+
+    it('should evalAdditionalData', () => {
+        wrapper.setData({additionalData: [
+            {
+                additionalDataRound: '1',
+                additionalDataDetail: 'descr',
+            },
+        ]});
+        // @ts-ignore
+        expect(wrapper.vm.evalAdditionalData()).toEqual([
+            {round: 1, description: 'descr'},
+        ]);
+    });
+
+    it('should evalCkeckboxes', () => {
+        wrapper.setData({offences: {
+            rage: true,
+            somethingelse: false,
+        }});
+        // @ts-ignore
+        expect(wrapper.vm.evalCheckboxes()).toEqual(['rage']);
+        expect(wrapper.vm.$data.offenceInvalid).toEqual(false);
+        wrapper.setData({offences: {
+            rage: false,
+            somethingelse: false,
+        }});
+        // @ts-ignore
+        expect(wrapper.vm.evalCheckboxes()).toEqual([]);
+        expect(wrapper.vm.$data.offenceInvalid).toEqual(true);
     });
 
     it('should submit ingame', () => {
         // @ts-ignore
         spyOn(wrapper.vm, 'evalCheckboxes').and.returnValue(['rage']);
+        // @ts-ignore
+        spyOn(wrapper.vm, 'evalLinks').and.returnValue({
+            proofLink: 'first url',
+            additionalLinksData: [
+                {link: 'snd url'},
+                {link: 'third url'},
+            ],
+        });
+        // @ts-ignore
+        spyOn(wrapper.vm, 'evalAdditionalData').and.returnValue([
+            {round: 1, description: 'some descr'},
+            {round: 2, description: 'some other descr'},
+        ]);
+
         wrapper.vm.$refs.form = {
-            validate: () => ({}),
             reset: () => ({}),
         } as unknown as MinorForm;
-
-        // invalid form
-        wrapper.setData({offenceInvalid: false, valid: false});
-        // @ts-ignore
-        expect(wrapper.vm.onSubmitInGame()).toEqual(false);
-
-        // invalid checkboxes
-        wrapper.setData({offenceInvalid: true, valid: true});
-        // @ts-ignore
-        expect(wrapper.vm.onSubmitInGame()).toEqual(false);
-
-        // valid
         wrapper.setData({
             where: 'in-game',
-            offenceInvalid: false,
-            valid: true,
-            proof: ['first url', 'snd url', 'third url'],
-            additionalData: [
-                {additionalDataRound: '1', additionalDataDetail: 'some descr'},
-                {additionalDataRound: '2', additionalDataDetail: 'some other descr'},
-            ],
         });
         // @ts-ignore
         expect(wrapper.vm.onSubmitInGame()).toEqual(true);
@@ -98,22 +158,42 @@ describe('MinorForm.vue', () => {
         ]);
     });
 
-    it('should evalCkeckboxes', () => {
-        wrapper.setData({offences: {
-            rage: true,
-            somethingelse: false,
-        }});
+    it('should submit matchroom', () => {
         // @ts-ignore
-        expect(wrapper.vm.evalCheckboxes()).toEqual(['rage']);
-        expect(wrapper.vm.$data.offenceInvalid).toEqual(false);
-        wrapper.setData({offences: {
-            rage: false,
-            somethingelse: false,
-        }});
+        spyOn(wrapper.vm, 'evalCheckboxes').and.returnValue(['rage']);
         // @ts-ignore
-        expect(wrapper.vm.evalCheckboxes()).toEqual([]);
-        expect(wrapper.vm.$data.offenceInvalid).toEqual(true);
-        
+        spyOn(wrapper.vm, 'evalLinks').and.returnValue({
+            proofLink: 'first url',
+            additionalLinksData: [
+                {link: 'snd url'},
+                {link: 'third url'},
+            ],
+        });
+
+        wrapper.vm.$refs.form = {
+            reset: () => ({}),
+        } as unknown as MinorForm;
+        wrapper.setData({
+            where: 'matchroom-chat',
+        });
+        // @ts-ignore
+        expect(wrapper.vm.onSubmitMatchroom()).toEqual(true);
+
+        expect(wrapper.emitted('submitted')).toEqual([
+            [
+                {
+                    data: {
+                        where: 'matchroom-chat',
+                        offences: ['rage'],
+                        proofLink: 'first url',
+                        additionalLinksData: [
+                            {link: 'snd url'},
+                            {link: 'third url'},
+                        ],
+                    },
+                },
+            ],
+        ]);
     });
 });
 

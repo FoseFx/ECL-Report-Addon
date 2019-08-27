@@ -66,6 +66,8 @@ browser.runtime.onMessage.addListener((req) => {
 });
 
 function sendRequest(pl) {
+  console.log(JSON.stringify(pl));
+  
   if (typeof content !== 'undefined') { // content.fetch is used by firefox 58 onwards to make request on behalf of the page
     return content.fetch('https://jsonplaceholder.typicode.com/todos/1');
   }
