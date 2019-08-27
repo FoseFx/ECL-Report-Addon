@@ -16,3 +16,35 @@ it('should emit event, when JS pushes new State to history', (next) => {
     });
     window.history.pushState({}, 'whocares?', 'http://localhost/lol?lmao=false&true');
 });
+it('should emit event, when resized from below 1100px to above 1100px', (next) => {
+    ecl_route_inject();
+    // default is 1024px
+
+    document.addEventListener('ecl_report_addon_route_change', () => {
+        expect(true).toEqual(true);
+        next();
+    });
+    // @ts-ignore
+    global.innerWidth = 1500;
+    // @ts-ignore
+    global.dispatchEvent(new Event('resize'));
+
+});
+
+it('should emit event, when resized from above 1100px to below 1100px', (next) => {
+    ecl_route_inject();
+    // @ts-ignore
+    global.innerWidth = 1500;
+    // @ts-ignore
+    global.dispatchEvent(new Event('resize'));
+
+    document.addEventListener('ecl_report_addon_route_change', () => {
+        expect(true).toEqual(true);
+        next();
+    });
+    // @ts-ignore
+    global.innerWidth = 1000;
+    // @ts-ignore
+    global.dispatchEvent(new Event('resize'));
+
+});
