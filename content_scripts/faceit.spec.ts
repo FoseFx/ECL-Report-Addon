@@ -91,7 +91,7 @@ it('should add button to players', () => {
         child.className = 'match-team-member__controls';
         el.appendChild(child);
         document.body.appendChild(el);
-        obj.players.push({guid: i + '', isUser: i === 5, name: 'name' });
+        obj.players.push({guid: i + '', isUser: i === 5, name: 'name', avatarUrl: 'some' });
     }
     obj.addReportButtons(document.querySelectorAll('match-team-member-v2'));
 
@@ -164,8 +164,8 @@ it('should buildPlayersArray', () => {
 it('should show Popup', () => {
     const obj = new FaceItClass();
     obj.players = [
-        {isUser: true, guid: 'user1', name: 'nick1'},
-        {isUser: false, guid: 'user2', name: 'nick2'}
+        {isUser: true, guid: 'user1', name: 'nick1', avatarUrl: 'test'},
+        {isUser: false, guid: 'user2', name: 'nick2', avatarUrl: 'test'}
     ];
     obj.roomName = 'ECL Division 1 (27000 ELO MAX';
     spyOn(obj, 'getEmail').and.returnValue('somemail@test.com');
@@ -179,7 +179,8 @@ it('should show Popup', () => {
         reportedUUID: 'user2',
         complaiantName: 'nick1',
         complaiantUUID: 'user1',
-        email: 'somemail@test.com'
+        email: 'somemail@test.com',
+        avatarUrl: 'test'
     });
 });
 
