@@ -16,9 +16,9 @@ cd ..
 
 if [ "$1" == "prod" ]
     then
-        for folder in "content_scripts" "background"; do
+        for folder in "" "content_scripts/" "background/"; do
             echo "Compressing $folder"
-            for filename in ./dist/$folder/*.js; do
+            for filename in ./dist/$folder*.js; do
                 npx terser --compress --mangle -o $filename -- $filename
             done
         done
