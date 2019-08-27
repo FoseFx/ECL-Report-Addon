@@ -103,16 +103,14 @@ export default class FormCard extends Vue {
         complaiantName: this.complaiantName,
         complaiantUUID: this.complaiantUUID,
         email: this.email,
-        data: {
-          division: this.division,
-          matchroomLink: document.location.href,
-        },
         reportedUUID: this.reportedUUID,
         reportedName: this.reportedName,
       }, event);
       if (type === 'major') {
         report.emailPub = false;
       }
+      report.data.division = this.division;
+      report.data.matchroomLink = document.location.href;
       this.stageTwo = true;
       document.dispatchEvent(new CustomEvent('ecl_report_addon_query_built', {detail: report}));
       this.addListeners();

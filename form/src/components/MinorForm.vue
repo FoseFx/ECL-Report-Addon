@@ -69,9 +69,7 @@
             <p>Proof</p>
             <v-row v-for="(_, index) in proof" v-bind:key="index">
                 <v-col cols="10">
-                    <v-text-field color="warning" label="Link to trusted source" required :rules="urlRules">
-
-                    </v-text-field>
+                    <v-text-field color="warning" label="Link to trusted source" required :rules="urlRules" v-model="proof[index].link"></v-text-field>
                 </v-col>
                 <v-col cols="1">
                     <v-btn text v-if="index !== 0" height="65%" @click="proof.splice(index, 1)">
@@ -124,7 +122,7 @@ export default class MinorForm extends Vue {
     };
     private offenceInvalid = false;
     private additionalData: AdditionalDatum[] = [{additionalDataRound: '', additionalDataDetail: ''}];
-    private proof: string[] = [''];
+    private proof: Array<{link: string}> = [{link: ''}];
 
     private urlRules: Array<(s: string) => boolean|string> = [
         (v) => !!v || 'When added it must be filled out',
@@ -183,10 +181,10 @@ export default class MinorForm extends Vue {
     }
 
     private evalLinks() {
-        const proofLink = this.proof.splice(0, 1)[0]; // take first of proof
+        const proofLink = this.proof.splice(0, 1)[0].link; // take first of proof
         const additionalLinksData = [];
         for (const link of this.proof) {
-            additionalLinksData.push({link});
+            additionalLinksData.push({link: link.link});
         }
         return {proofLink, additionalLinksData};
     }

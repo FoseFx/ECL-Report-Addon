@@ -68,7 +68,7 @@ describe('MinorForm.vue', () => {
     });
 
     it('should evalLinks', () => {
-        wrapper.setData({proof: ['first url', 'second url', 'third url']});
+        wrapper.setData({proof: [{link: 'first url'}, {link: 'second url'}, {link: 'third url'}]});
         // @ts-ignore
         expect(wrapper.vm.evalLinks()).toEqual(
             {
