@@ -5,7 +5,6 @@
         <v-radio-group v-model="where" :mandatory="true" :rules="[v => !!v || 'Item is required']">
             <v-radio color="warning" label="In-game" value="in-game"></v-radio>
             <v-radio color="warning" label="Matchroom chat" value="matchroom-chat"></v-radio>
-            <v-radio color="warning" label="ECL Division chat" value="ecl-division-chat"></v-radio>
         </v-radio-group>
     </v-container>
 
