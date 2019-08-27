@@ -67,9 +67,16 @@ browser.runtime.onMessage.addListener((req) => {
 
 function sendRequest(pl) {
   console.log('as str', JSON.stringify(pl));
-  
+  const URL = "https://report.ecl.gg/api/contact";
+  const opts = {
+    headers: {
+      "content-type": "application/json"
+    },
+    method: "POST",
+    body: JSON.stringify(pl)
+  };
   if (typeof content !== 'undefined') { // content.fetch is used by firefox 58 onwards to make request on behalf of the page
-    return content.fetch('https://jsonplaceholder.typicode.com/todos/1');
+    return content.fetch(URL, opts);
   }
-  return fetch('https://jsonplaceholder.typicode.com/todos/1'); // chome does this by default
+  return fetch(URL, opts); // chome does this by default
 }
