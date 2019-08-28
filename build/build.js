@@ -36,4 +36,4 @@ async function removeDir(dir) {
     }
     console.log("\n\n");
     
-})();
+})().catch(_ => process.exit(1));
