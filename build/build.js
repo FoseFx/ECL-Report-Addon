@@ -1,5 +1,7 @@
 const run = require('./run');
 const glob = require('glob');
+const fs = require('fs');
+const path = require('path');
 const arg = process.argv[2];
 
 async function removeDir(dir) {
@@ -16,13 +18,20 @@ async function removeDir(dir) {
     }
 }
 
+function replaceInFile(file, find, replace) {
+    const content = fs.readFileSync(file, 'utf-8');
+    const ncontent = content.replace(new RegExp(find, "g"), replace);
+    fs.writeFileSync(file, ncontent, 'utf-8');
+}
+
 (async () => {
     await removeDir("dist");  // clean old dist folder
     await run("mkdir dist");  // make new dist folder
     await run("npm run tsc:" + arg);  // transpile content_scripts and msg_broker
     await removeDir("dist/form");  // we dont need this
-    await run("sed -i 's/export //' dist/content_scripts/faceit.js");  // remove 'export' from file
-    await run("sed -i 's/export //' dist/background/msg_broker.js");  // x2
+    replaceInFile(path.join(process.cwd(), 'dist/content_scripts/faceit.js'), 'export', ''); // remove 'export' from file
+    replaceInFile(path.join(process.cwd(), 'dist/background/msg_broker.js'), 'export', ''); // x2
+
     await run("cp node_modules/webextension-polyfill/dist/browser-polyfill.min.js dist/browser-polyfill.min.js");  // copy polyfill to scripts
     await run("cp manifest.json dist/.");  // copy manifest over
     process.chdir('form');
