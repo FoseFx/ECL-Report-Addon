@@ -4,6 +4,8 @@ const fs = require('fs');
 const path = require('path');
 const arg = process.argv[2];
 
+console.log(process.platform);
+
 async function removeDir(dir) {
     console.log('remove', dir);
     
@@ -31,7 +33,6 @@ function replaceInFile(file, find, replace) {
     await removeDir("dist/form");  // we dont need this
     replaceInFile(path.join(process.cwd(), 'dist/content_scripts/faceit.js'), 'export', ''); // remove 'export' from file
     replaceInFile(path.join(process.cwd(), 'dist/background/msg_broker.js'), 'export', ''); // x2
-
     await run("cp node_modules/webextension-polyfill/dist/browser-polyfill.min.js dist/browser-polyfill.min.js");  // copy polyfill to scripts
     await run("cp manifest.json dist/.");  // copy manifest over
     process.chdir('form');
