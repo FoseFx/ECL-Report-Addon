@@ -4,8 +4,11 @@
   "description": "An addon that makes reporting players in ECL (ecl.gg) easier",
   "main": "index.js",
   "scripts": {
-    "build:prod": "./build.sh prod",
-    "build:dev": "./build.sh dev",
+    "setup": "node build/setup.js",
+    "build:prod": "node build/build.js prod",
+    "build:dev": "node build/build.js dev",
+    "tsc:dev": "tsc -b tsconfig.content_scripts.dev.json",
+    "tsc:prod": "tsc -b tsconfig.content_scripts.prod.json",
     "test:cs": "jest --coverage",
     "test": "npm run test:cs && cd form && npm run test:unit && cd ..",
     "lint": "tslint -c tslint.json content_scripts/*.ts",
@@ -16,6 +19,7 @@
   "license": "Other",
   "devDependencies": {
     "@types/jest": "^24.0.18",
+    "glob": "^7.1.4",
     "husky": "^3.0.4",
     "jest": "^24.9.0",
     "terser": "^4.2.1",
