@@ -6,7 +6,11 @@ async function removeDir(dir) {
     console.log('remove', dir);
     
     if (process.platform === 'win32') {
-        await run(`rd /s /q "${dir}"`);
+        try {
+            await run(`rd /s /q "${dir}"`);
+        } catch (_) {
+            console.log(dir + ' does not exist, could not remove it');
+        }
     } else {
         await run('rm -rf ' + dir);
     }
