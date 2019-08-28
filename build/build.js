@@ -3,8 +3,10 @@ const glob = require('glob');
 const arg = process.argv[2];
 
 async function removeDir(dir) {
+    console.log('remove', dir);
+    
     if (process.platform === 'win32') {
-        await run('rd /s /q "' + dir + '"');
+        await run(`rd /s /q "${dir}"`);
     } else {
         await run('rm -rf ' + dir);
     }
