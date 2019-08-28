@@ -5,4 +5,7 @@ const run = require('./run');
     process.chdir('form');
     await run("npm ci");
     process.chdir('../');    
-})().catch(_ => process.exit(1));
+})().catch(e => {
+    console.error(e);
+    process.exit(1);
+});
