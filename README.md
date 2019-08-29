@@ -4,6 +4,18 @@
 # THIS ADDON IS WORK IN PROGRESS AND CURRENTLY: NOT WORKING
 
 (Name and patent pending :P)
+
+## What is this?
+[ECL](https://ecl.gg/) is a matchmaking organizer for Counter-Strike: Global Offensive.
+Their games are hosted and managed by [Faceit](https://www.faceit.com/).
+In order to report misbehaving players ECL made their own report tool.
+Unfortunately a lot of information must be copied over, like a link to the match room, the link to the reported player
+and so on.
+This discourages players from reporting others and gives room for toxic players.
+The goal of this extension is to offer a clean and fast way to report players and
+making the ECL experience a bit better.
+
+
 # For users
 
 Did you discover something strage or want to request a new feature?
