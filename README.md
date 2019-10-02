@@ -48,3 +48,4 @@ Code style and readability is important! Use `npm run lint` to check if your cod
 - Going live
 - Dev: Windows support
 - Bug fixes
+- Some kind of imgur integration
