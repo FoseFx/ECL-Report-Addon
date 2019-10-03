@@ -9,8 +9,8 @@
               v-on:close="show = false"
               v-bind:division="division"
               v-bind:avatar="avatarUrl"
-              v-bind:complaiant-u-u-i-d="complaiantUUID"
-              v-bind:complaiant-name="complaiantName"
+              v-bind:complainant-u-u-i-d="complainantUUID"
+              v-bind:complainant-name="complainantName"
               v-bind:reported-u-u-i-d="reportedUUID"
               v-bind:reported-name="reportedName" 
               v-bind:email="email">
@@ -35,8 +35,8 @@ import FormCard from './components/FormCard.vue';
 })
 export default class App extends Vue {
   public division: string = '';
-  public complaiantUUID: string = '';
-  public complaiantName: string = '';
+  public complainantUUID: string = '';
+  public complainantName: string = '';
   public reportedUUID: string = '';
   public reportedName: string = '';
   public avatarUrl: string = '';

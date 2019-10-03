@@ -82,8 +82,8 @@ import { Report } from '../types';
 })
 export default class FormCard extends Vue {
     @Prop() public division!: string;
-    @Prop() public complaiantUUID!: string;
-    @Prop() public complaiantName!: string;
+    @Prop() public complainantUUID!: string;
+    @Prop() public complainantName!: string;
     @Prop() public reportedUUID!: string;
     @Prop() public reportedName!: string;
     @Prop() public email!: string;
@@ -100,8 +100,8 @@ export default class FormCard extends Vue {
       const report: Report = Object.assign({
         type,
         service: 'classical',
-        complaiantName: this.complaiantName,
-        complaiantUUID: this.complaiantUUID,
+        complainantName: this.complainantName,
+        complainantUUID: this.complainantUUID,
         email: this.email,
         reportedUUID: this.reportedUUID,
         reportedName: this.reportedName,

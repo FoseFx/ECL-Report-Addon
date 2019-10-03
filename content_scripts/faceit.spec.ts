@@ -177,8 +177,8 @@ it('should show Popup', () => {
         division: '1',
         reportedName: 'nick2',
         reportedUUID: 'user2',
-        complaiantName: 'nick1',
-        complaiantUUID: 'user1',
+        complainantName: 'nick1',
+        complainantUUID: 'user1',
         email: 'somemail@test.com',
         avatarUrl: 'test'
     });

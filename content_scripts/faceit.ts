@@ -28,8 +28,8 @@ interface AngualarPlayerElementInfo {
 
 interface VueAppInstance {
     division: string;
-    complaiantUUID: string;
-    complaiantName: string;
+    complainantUUID: string;
+    complainantName: string;
     reportedUUID: string;
     reportedName: string;
     email: string;
@@ -169,8 +169,8 @@ export class FaceItClass {
         app.show = true;
         app.reportedName = player.name;
         app.reportedUUID = player.guid;
-        app.complaiantName = user.name;
-        app.complaiantUUID = user.guid;
+        app.complainantName = user.name;
+        app.complainantUUID = user.guid;
         app.avatarUrl = player.avatarUrl;
         app.division = this.getDivision();
         app.email = this.getEmail();

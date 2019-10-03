@@ -3,8 +3,8 @@ export interface Report {
     type: 'major'|'minor';
     service: 'classical';
     recaptcha: string;
-    complaiantUUID: string;
-    complaiantName: string;
+    complainantUUID: string;
+    complainantName: string;
     email: string;
     emailPub: boolean;
     emailReport: boolean;
