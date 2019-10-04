@@ -38,6 +38,10 @@ This discourages players from reporting others and gives room for toxic players.
 The goal of this extension is to offer a clean and fast way to report players and
 making the ECL experience a bit better.
 
+<h1 align="center">Install</h1>
+
+Install the addon from the [Google Chrome Store][chrome] or [addons.mozilla.org][mozilla].
+
 
 <h1 align="center">For users</h1>
 
@@ -58,6 +62,7 @@ If you want to contribute to this project make sure you read the [CODE OF CONDUC
 2. Install Dependencies `npm run setup`
 3. Build the extension for development using `npm run build:dev`
 4. Build the extension for production using `npm run build:prod`
+5. [Install the build](#install-build)
 
 ## Testing
 In order to be merged your code must be tested.
@@ -68,9 +73,34 @@ Run `npm test` to run all tests and to generate a coverage report (open using `f
 ## Linting
 Code style and readability is important! Use `npm run lint` to check if your code is compliant, if not try `npm run lint:fix` and/or manually fix it.
 
+## Install build
+
+### Firefox
+
+1. Navigate to `about:addons`.
+2. Click on the wheel
+3. Click `debug addon`
+4. Click `load temporary addon`
+
+
+### Chrome
+
+1. Navigate to `chrome://extensions/`.
+2. Activate `developer mode` in the upper right corner
+3. Click `load unpacked`
+
+<br><br><br><br><br><br>
+
+
 # TODO
 - Finish MinorForm
 - Going live
 - Dev: Windows support
 - Bug fixes
 - Some kind of imgur integration
+
+
+[gh-release]: about:blank
+[mozilla]: about:blank
+[chrome]: about:blank
+
