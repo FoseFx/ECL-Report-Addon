@@ -1,4 +1,4 @@
-const secret = '6Lcm82UUAAAAAJ5lLek01opD2mw59XfcFzfvs0hP';
+const secret = '6Lcm82UUAAAAAJ5lLek01opD2mw59XfcFzfvs0hP'; // This is the ID used for reCaptcha. I found it in report.ecl.gg's source code
 
 const html = `
 console.log('injected');
@@ -70,7 +70,8 @@ function sendRequest(pl) {
   const URL = "https://report.ecl.gg/api/contact";
   const opts = {
     headers: {
-      "content-type": "application/json"
+      "Content-Type": "application/json; charset=UTF-8",
+      "Accept": "application/json, text/plain, */*"
     },
     method: "POST",
     body: JSON.stringify(pl)
