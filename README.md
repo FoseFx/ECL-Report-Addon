@@ -8,22 +8,27 @@
 
 
 <p align="center">
-    <a href="CODE_OF_CONDUCT.md">
-        <img src="https://img.shields.io/badge/Contributor%20Covenant-v1.4%20adopted-ff69b4.svg" alt="Contributor Covenant">
-    </a>
-    <img src="https://img.shields.io/github/license/Fosefx/ECL-Report-Addon" alt="GitHub">
-    <a href="https://codeclimate.com/github/FoseFx/ECL-Report-Addon/maintainability">
-        <img src="https://api.codeclimate.com/v1/badges/53d21221c122857a0678/maintainability" alt="Maintainability">
-    </a>
     <a href="https://codecov.io/gh/FoseFx/ECL-Report-Addon">
         <img src="https://codecov.io/gh/FoseFx/ECL-Report-Addon/branch/master/graph/badge.svg" alt="codecov">
     </a>
     <a href="https://travis-ci.com/FoseFx/ECL-Report-Addon">
         <img src="https://travis-ci.com/FoseFx/ECL-Report-Addon.svg?branch=master" alt="Travis Build">
     </a>
+    <br>
     <a href="https://mergify.io">
         <img src="https://img.shields.io/endpoint.svg?url=https://gh.mergify.io/badges/FoseFx/ECL-Report-Addon&style=flat" alt="Mergify">
     </a>
+    <a>
+        <img alt="Dependabot" src="https://api.dependabot.com/badges/status?host=github&repo=FoseFx/ECL-Report-Addon" >
+    </a>
+    <br>
+    <a href="CODE_OF_CONDUCT.md">
+        <img src="https://img.shields.io/badge/Contributor%20Covenant-v1.4%20adopted-ff69b4.svg" alt="Contributor Covenant">
+    </a>
+    <img src="https://img.shields.io/github/license/Fosefx/ECL-Report-Addon" alt="GitHub">
+    <a href="https://codeclimate.com/github/FoseFx/ECL-Report-Addon/maintainability">
+        <img src="https://api.codeclimate.com/v1/badges/53d21221c122857a0678/maintainability" alt="Maintainability">
+    </a>  
 </p>
 
 
