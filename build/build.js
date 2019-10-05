@@ -29,6 +29,7 @@ function replaceInFile(file, find, replace) {
 (async () => {
     await removeDir("dist");  // clean old dist folder
     await run("mkdir dist");  // make new dist folder
+    await run("cp -r icons dist/icons");  // copy icons directory
     await run("npm run tsc:" + arg);  // transpile content_scripts and msg_broker
     await removeDir("dist/form");  // we dont need this
     replaceInFile(path.join(process.cwd(), 'dist/content_scripts/faceit.js'), 'export', ''); // remove 'export' from file

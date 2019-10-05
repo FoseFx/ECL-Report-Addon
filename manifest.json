@@ -3,7 +3,12 @@
     "name": "ecl-report-addon",
     "version": "1.0.0",
     "description": "An addon that makes reporting players in ECL (ecl.gg) easier",
-    "homepage_url": "https://www.fosefx.com/",  
+    "homepage_url": "https://fosefx.github.io/ECL-Report-Addon/",
+    "author": "FoseFx",
+    "icons": {
+      "48": "icons/1x.png",
+      "96": "icons/2x.png"
+    },
     "permissions": [
       "activeTab",
       "tabs",
