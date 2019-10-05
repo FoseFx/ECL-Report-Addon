@@ -88,12 +88,27 @@ export default class FormCard extends Vue {
     @Prop() public reportedName!: string;
     @Prop() public email!: string;
     @Prop() public avatar!: string;
+    @Prop() public visible!: boolean;
 
     private stageTwo = false;
     private done = false;
     private error = '';
     private showIframe = true;
     private tab = 0;
+
+    constructor() {
+      super();
+
+      // escape-key should close form
+      window.addEventListener('keydown', (e: KeyboardEvent) => {
+        if (e.key === 'Escape' && this.visible) { // should not trigger when closed
+          e.preventDefault();
+          e.stopPropagation(); // stop any further bubbling of the event
+          this.close();
+        }
+      });
+
+    }
 
     public onSubmit(event: Report) {
       const type = this.tab === 0 ? 'minor' : 'major';

@@ -22,6 +22,31 @@ describe('FormCard', () => {
     expect(true).toBe(true);
   });
 
+  it('should register escape-key listener', () => {
+    //
+    // set up mock
+    //
+    const closeSpy = jest.fn();
+    // @ts-ignore
+    wrapper.vm.close = closeSpy;
+
+    // set visible = true and dispatch escape-key-event
+    wrapper.setProps({visible: true});
+    const escEvent = new KeyboardEvent('keydown', {key: 'Escape'});
+    window.dispatchEvent(escEvent);
+
+    // should close
+    expect(closeSpy).toHaveBeenCalled();
+
+    closeSpy.mockReset();
+
+    // set visible = false and dispatch event
+    wrapper.setProps({visible: false});
+    window.dispatchEvent(escEvent);
+    expect(closeSpy).not.toHaveBeenCalled(); // should not trigger when closed
+
+  });
+
   it('should render name and div passed', () => {
     wrapper.setProps({
       division: 3,
