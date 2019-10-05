@@ -56,7 +56,7 @@ PM me [on twitter](https://www.twitter.com/FoseFx) or write me an [email](mailto
 
 <br><br>
 
-<h1 align="center">For Developers</h1>
+<h1 id="for-developers" align="center">For Developers</h1>
 
 If you want to contribute to this project make sure you read the [CODE OF CONDUCT](CODE_OF_CONDUCT.md) and are familiar with [How to contribute to open source](https://opensource.guide/how-to-contribute/#a-checklist-before-you-contribute). Read the [CONTRIBUTING.md](CONTRIBUTING.md).
 
