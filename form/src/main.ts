@@ -15,5 +15,6 @@ window.ecl_addon_vue_instance = new Vue({
   render: (h) => h(App),
 }).$mount('#ecl_popup_mount');
 
+// eslint-disable-next-line max-line-length
 export const URLREGEX = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/;
 

@@ -12,8 +12,9 @@
               v-bind:complainant-u-u-i-d="complainantUUID"
               v-bind:complainant-name="complainantName"
               v-bind:reported-u-u-i-d="reportedUUID"
-              v-bind:reported-name="reportedName" 
-              v-bind:email="email">
+              v-bind:reported-name="reportedName"
+              v-bind:email="email"
+              v-bind:visible="show">
             </FormCard>
           </v-col>
       </v-row>
