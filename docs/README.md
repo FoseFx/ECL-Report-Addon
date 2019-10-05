@@ -1,3 +1,9 @@
+---
+layout: default
+title: Developer Documentation
+nav_order: 2
+---
+
 <h1>Developer Documentation</h1>
 
 > Notice:<br>
