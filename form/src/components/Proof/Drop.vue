@@ -11,7 +11,7 @@
     @drop="drop">
     <label>
         {{hasSelected ? filename : 'Drop/select image(s) here'}}
-        <input type="file" @change="inputSelected" multiple="multiple" accept="image/*">
+        <input type="file" @change="inputSelected" multiple="multiple" accept="image/*" :mandatory="true">
     </label>
 </div>
 </template>

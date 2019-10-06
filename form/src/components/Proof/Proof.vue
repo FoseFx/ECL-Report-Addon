@@ -2,7 +2,7 @@
 <div class="imgur-wrapper" v-bind:class="{invalid: !valid() && dirty(), url: mode === 1}">
     <!-- Imgur -->
     <p v-if="mode === 0" class="legal">By using Imgur you agree <a href="https://imgur.com/tos" target="blank">to their Terms</a></p>
-    <drop-component v-if="mode === 0" @valid="setImgurValid" @dirty="setImgurDirty"></drop-component>
+    <drop-component ref="drop" v-if="mode === 0" @valid="setImgurValid" @dirty="setImgurDirty"></drop-component>
     <div v-if="mode === 0">
         <v-btn raised color="purple" @click="mode = 1">Or use an URL</v-btn>
     </div>
