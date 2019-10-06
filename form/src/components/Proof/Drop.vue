@@ -1,24 +1,18 @@
 <template>
-<div class="imgur-wrapper">
-    <p class="legal">By using the Imgur uploader you agree <a href="https://imgur.com/tos" target="blank">to their Terms</a></p>
-    <div 
-        class="imgur-drop"
-        v-bind:class="{isdraging: isDraging, hasselected: hasSelected}"
-        @drag="preventDefaultAndBubbling"
-        @dragstart="preventDefaultAndBubbling"
-        @dragend="removeDraging"
-        @dragover="setDraging"
-        @dragenter="setDraging"
-        @dragleave="removeDraging"
-        @drop="drop">
-        <label>
-            {{hasSelected ? filename : 'Drop/select image(s) here'}}
-            <input type="file" @change="inputSelected" multiple="multiple" accept="image/*">
-        </label>
-    </div>
-    <div>
-        <v-btn raised color="purple">Or use a URL</v-btn>
-    </div>
+<div 
+    class="imgur-drop"
+    v-bind:class="{isdraging: isDraging, hasselected: hasSelected}"
+    @drag="preventDefaultAndBubbling"
+    @dragstart="preventDefaultAndBubbling"
+    @dragend="removeDraging"
+    @dragover="setDraging"
+    @dragenter="setDraging"
+    @dragleave="removeDraging"
+    @drop="drop">
+    <label>
+        {{hasSelected ? filename : 'Drop/select image(s) here'}}
+        <input type="file" @change="inputSelected" multiple="multiple" accept="image/*">
+    </label>
 </div>
 </template>
 
@@ -26,11 +20,30 @@
 import { Component, Vue } from 'vue-property-decorator';
 
 @Component
-export default class ProofComponent extends Vue {
+export default class DropComponent extends Vue {
+    // see https://help.imgur.com/hc/en-us/articles/115000083326-What-files-can-I-upload-What-is-the-size-limit
+    public ALLOWED_MIMES = ['image/jpeg', 'image/png', 'image/gif', 'image/apng', 'image/tiff'];
     public isDraging = false;
     public hasSelected = false;
     public filename = '';
     public stagingFiles: FileList|null = null;
+
+    public valid(): boolean {
+        if (this.hasSelected === false || this.stagingFiles === null) {
+            return false;
+        }
+        for (let i = 0; i < this.stagingFiles.length; i++) {
+            const file = this.stagingFiles[i];
+            if (!this.isAllowedMime(file)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public isAllowedMime(file: File): boolean {
+        return !!this.ALLOWED_MIMES.find((t) => t === file.type);
+    }
 
     public preventDefaultAndBubbling(e: Event) {
         e.preventDefault();
@@ -68,27 +81,15 @@ export default class ProofComponent extends Vue {
         } else {
             this.filename = `${files.length} items`;
         }
-        this.stagingFiles = files as FileList;        
+        this.stagingFiles = files as FileList;
+        this.$emit('valid', this.valid());
+        this.$emit('dirty', true);
     }
 }
 </script>
 
 <style lang="scss" scoped>
-.imgur-wrapper {
-    position: relative;
-    margin: 0 auto;
-    width: 90%;
-    height: 8rem;
-    border-radius: 0.5rem;
-    background: white;
-    display: grid;
-    grid-template: 1fr / 2fr 1fr;
-    & > div {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-}
+
 .imgur-drop {
     border-radius: 0.5rem;
     background: rgb(232,183,69);
@@ -121,14 +122,4 @@ export default class ProofComponent extends Vue {
         opacity: 0.01;
     }
 }
-.legal {
-    position: absolute;
-    bottom: 3px;
-    left: 0;
-    font-size: 0.7rem;
-    padding: 0;
-    margin: 0;
-    padding-left: 3px;
-}
-
 </style>

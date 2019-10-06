@@ -28,6 +28,7 @@
 
         <p>Proof</p>
         <proof-component></proof-component>
+
         <v-switch color="warning" v-model="emailReport" label="Email me updates on this case"></v-switch>
 
         <v-btn outlined color="warning" class="save-btn" large v-bind:disabled="!valid" @click="onSubmit">
@@ -39,7 +40,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import ProofComponent from './Proof.vue';
+import ProofComponent from './Proof/Proof.vue';
 import { URLREGEX } from '../main';
 
 @Component({

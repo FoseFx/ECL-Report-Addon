@@ -1,15 +1,15 @@
 import { Wrapper, createLocalVue, shallowMount } from '@vue/test-utils';
-import ProofComponent from '@/components/Proof.vue';
+import DropComponent from '@/components/Proof/Drop.vue';
 import vuetify from 'vuetify';
 
-describe('ProofComponent', () => {
-  let wrapper: Wrapper<ProofComponent>;
+describe('DropComponent', () => {
+  let wrapper: Wrapper<DropComponent>;
   beforeEach(() => {
     const localVue = createLocalVue();
     localVue.use(vuetify);
 
     wrapper = shallowMount(
-      ProofComponent,
+      DropComponent,
       {
         localVue,
       },
@@ -116,5 +116,30 @@ describe('ProofComponent', () => {
         expect(wrapper.vm.$data.stagingFiles).toEqual(['a', 'b', 'c']);
 
     });
+
+  it('should return whether MIME of file is allowed', () => {
+      // @ts-ignore
+      expect(wrapper.vm.isAllowedMime({type: 'image/lmao'})).toEqual(false);
+      // @ts-ignore
+      expect(wrapper.vm.isAllowedMime({type: 'image/jpeg'})).toEqual(true);
+    });
+
+  it('should return whether component is valid', () => {
+    wrapper.setData({stagingFiles: null, filename: '', hasSelected: false});
+    // @ts-ignore
+    expect(wrapper.vm.valid()).toEqual(false);
+
+    // @ts-ignore
+    wrapper.vm.isAllowedMime = (_) => false;
+    wrapper.setData({stagingFiles: [{type: 's'}], filename: '', hasSelected: true});
+    // @ts-ignore
+    expect(wrapper.vm.valid()).toEqual(false);
+
+    // @ts-ignore
+    wrapper.vm.isAllowedMime = (_) => true;
+    wrapper.setData({stagingFiles: [{type: 's'}], filename: '', hasSelected: true});
+    // @ts-ignore
+    expect(wrapper.vm.valid()).toEqual(true);
+  });
 
 });
