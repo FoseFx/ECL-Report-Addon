@@ -22,18 +22,6 @@ describe('MajorForm.vue', () => {
         expect(wrapper).toBeTruthy();
     });
 
-    it('should proof', () => {
-        const data = wrapper.vm.$data;
-
-        const {proofRules} = data;
-
-        expect(proofRules[0]('')).toEqual('Proof required');
-        expect(proofRules[0]('some val')).toEqual(true);
-
-        expect(proofRules[1]('some val')).toEqual('Not a valid URL');
-        expect(proofRules[1]('https://imgur.com/a/9bvgOzv')).toEqual(true);
-
-    });
 
     it('should submit', () => {
         wrapper.setData({

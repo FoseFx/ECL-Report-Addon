@@ -41,7 +41,6 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import ProofComponent from './Proof/Proof.vue';
-import { URLREGEX } from '../main';
 
 @Component({
   components: {
@@ -54,11 +53,6 @@ export default class MajorForm extends Vue {
     private subject = '';
     private additionalLinksData = [{link: ''}];
     private emailReport = false;
-
-    private proofRules: Array<(s: string) => boolean|string> = [
-      (v) => !!v || 'Proof required',
-      (v) => URLREGEX.test(v) || 'Not a valid URL',
-    ];
 
     private onSubmit() {
       // @ts-ignore
