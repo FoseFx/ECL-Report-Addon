@@ -27,33 +27,7 @@
         ></v-textarea>
 
         <p>Proof</p>
-        <v-row
-          no-gutters
-          v-for="(obj, index) in additionalLinksData" 
-          v-bind:key="index">
-          <v-col cols="11">
-            <v-text-field
-              color="warning"
-              label="Link to trusted source"
-              :mandatory="true"
-              outlined
-              v-model="additionalLinksData[index].link"
-              required
-              :rules="proofRules">
-            </v-text-field>
-          </v-col>
-          <v-col cols="1">
-            <v-btn v-if="index !== 0" text height="65%" @click="additionalLinksData.splice(index, 1)">
-              <v-icon >mdi-minus</v-icon>
-            </v-btn>
-          </v-col>
-          
-        </v-row>
-        
-        <v-btn text @click="additionalLinksData.push({links: ''})">
-            <v-icon left>mdi-plus</v-icon> add more
-        </v-btn>
-
+        <proof-component></proof-component>
         <v-switch color="warning" v-model="emailReport" label="Email me updates on this case"></v-switch>
 
         <v-btn outlined color="warning" class="save-btn" large v-bind:disabled="!valid" @click="onSubmit">
@@ -65,9 +39,14 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
+import ProofComponent from './Proof.vue';
 import { URLREGEX } from '../main';
 
-@Component
+@Component({
+  components: {
+    ProofComponent,
+  },
+})
 export default class MajorForm extends Vue {
     public valid = false;
     private why = 'toxicity';
