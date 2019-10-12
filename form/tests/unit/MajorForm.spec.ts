@@ -102,31 +102,7 @@ describe('MajorForm.vue', () => {
     });
 
     it('should uploadToImgur', async () => {
-        const fakeFile = new File(['ctnt'], 'fileone.png');
-        // @ts-ignore
-        window.fetch = jest.fn().mockReturnValue(Promise.resolve({json: () => Promise.resolve({link: 'test.com'})}));
-        // @ts-ignore
-        const resp = await wrapper.vm.uploadToImgur([fakeFile]);
-
-        expect(resp).toEqual(['test.com']);
-        // @ts-ignore
-        const args = window.fetch.mock.calls[0];
-        const opts = args[1];
-        const body = opts.body as FormData;
-
-        for (const key of body.keys()) {
-            if (key === 'image') {
-                expect(body.get(key)).toEqual(fakeFile);
-            } else if (key === 'type') {
-                expect(body.get(key)).toEqual('file');
-            } else if (key === 'name') {
-                expect(body.get(key)).toEqual('fileone.png');
-            } else if (key === 'title') {
-                expect(body.get(key)).toEqual('Image uploaded by the ECL-Report-Addon');
-            }
-        }
-
-        expect(window.fetch).toHaveBeenCalled();
+        
     });
 
 

@@ -92,17 +92,26 @@ export default class MajorForm extends Vue {
 
       let additionalLinksData: Array<{links: string}> = [];
 
-      for (const proof of proofs) {
-        if (proof.mode === 1) {
-          additionalLinksData.push({links: proof.urlValue});
-        } else {
-          const drop = proof.$refs.drop as DropComponent;
-          const resp = await this.uploadToImgur(drop.stagingFiles as FileList);
-          const toConcat = resp.map((s: string) => ({links: s}));
-          additionalLinksData = additionalLinksData.concat(toConcat);
+      try {
+        this.blockEverything = true;
+        for (const proof of proofs) {
+          if (proof.mode === 1) {
+            additionalLinksData.push({links: proof.urlValue});
+          } else {
+            const drop = proof.$refs.drop as DropComponent;
+            const resp = await this.uploadToImgur(drop.stagingFiles as FileList);
+            const toConcat = resp.map((s: string) => ({links: s}));
+            additionalLinksData = additionalLinksData.concat(toConcat);
+          }
         }
+      } catch(error) {
+        this.blockEverything = false;
+        console.error('Uploading to imgur failed', error);
+        return;
       }
 
+      console.log(additionalLinksData);
+      
       //
       // tell parent to show captcha by passing the data to it
       //
@@ -121,29 +130,58 @@ export default class MajorForm extends Vue {
 
       // @ts-ignore
       this.$refs.form.reset();
+      this.blockEverything = false;
+    }
+
+    private fileToBase64(file: File): Promise<string> {
+      return new Promise((res) => {
+        const reader = new FileReader();
+        reader.onload = (readerEvt) => {
+          // @ts-ignore
+          const binaryString = readerEvt.target.result as string;
+          const base64 = btoa(binaryString);
+          return res(base64);
+        };
+        reader.readAsBinaryString(file);
+      });
     }
 
     private async uploadToImgur(files: FileList): Promise<string[]> {
-      const array: string[] = [];
-      for (const file of Array.from(files)) {
-        const body = new FormData();
-        body.append('image', file);
-        body.append('type', 'file');
-        body.append('name', file.name);
-        body.append('title', 'Image uploaded by the ECL-Report-Addon');
 
-        const res = await fetch('https://api.imgur.com/v3/upload', {
-          // We bypass CORS by requesting permission for imgur.com in manifest.json
-          method: 'POST',
-          headers: {
-            Authorization: 'Client-ID 5d7cf2731f6b345',
-          },
-          body,
-        });
-        const json = await res.json();
-        array.push(json.link);
+      const baseArray: Array<{name: string, base64: string}> = [];
+
+      for (let i = 0; i < files.length; i++) {
+        const base64 = await this.fileToBase64(files[i]);
+        const name = files[i].name;
+        baseArray.push({name, base64});
       }
-      return array;
+
+      return new Promise((resolve, reject) => {
+        
+        function errListener(event: CustomEvent) {
+          removeListeners();
+          return reject(event.detail);
+        }
+
+        function sucListener(event: CustomEvent) {
+          removeListeners();
+          return resolve(event.detail);
+        }
+
+        function removeListeners() {
+          // @ts-ignore
+          document.removeEventListener('ecl_report_addon_imgur_upload_result', sucListener);
+          // @ts-ignore
+          document.removeEventListener('ecl_report_addon_imgur_upload_result_error', errListener);
+        }
+          // @ts-ignore
+        document.addEventListener('ecl_report_addon_imgur_upload_result', sucListener);
+          // @ts-ignore
+        document.addEventListener('ecl_report_addon_imgur_upload_result_error', sucListener);
+
+        document.dispatchEvent(new CustomEvent('ecl_report_addon_imgur_upload', {detail: baseArray}));
+
+      });
     }
 }
 </script>

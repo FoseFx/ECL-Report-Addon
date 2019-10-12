@@ -45,3 +45,18 @@ document.addEventListener('ecl_report_addon_query_built', (e) => {
         document.dispatchEvent(new CustomEvent('ecl_report_addon_fetch_failed', {detail: arg}));
     });
 });
+
+document.addEventListener('ecl_report_addon_imgur_upload', (e) => {
+    const files = e.detail; // Array<{name, base64}>
+    const req = {
+        type: 'IMGUR_UPLOAD',
+        data: files
+    };
+    browser.runtime.sendMessage(req).then((array) => {
+        console.log('arrarray', array);
+        document.dispatchEvent(new CustomEvent('ecl_report_addon_imgur_upload_result', {detail: array}));
+    })
+    .catch((err) => {
+        document.dispatchEvent(new CustomEvent('ecl_report_addon_imgur_upload_result_error', {detail: err}));
+    });
+});
