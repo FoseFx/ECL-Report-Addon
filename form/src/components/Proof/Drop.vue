@@ -32,8 +32,7 @@ export default class DropComponent extends Vue {
         if (this.hasSelected === false || this.stagingFiles === null) {
             return false;
         }
-        for (let i = 0; i < this.stagingFiles.length; i++) {
-            const file = this.stagingFiles[i];
+        for (const file of (this.stagingFiles)) {
             if (!this.isAllowedMime(file)) {
                 return false;
             }
