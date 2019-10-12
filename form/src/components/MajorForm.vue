@@ -177,7 +177,7 @@ export default class MajorForm extends Vue {
           // @ts-ignore
         document.addEventListener('ecl_report_addon_imgur_upload_result', sucListener);
           // @ts-ignore
-        document.addEventListener('ecl_report_addon_imgur_upload_result_error', sucListener);
+        document.addEventListener('ecl_report_addon_imgur_upload_result_error', errListener);
 
         document.dispatchEvent(new CustomEvent('ecl_report_addon_imgur_upload', {detail: baseArray}));
 
