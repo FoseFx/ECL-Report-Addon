@@ -12,7 +12,8 @@
     "permissions": [
       "activeTab",
       "tabs",
-      "webRequest"
+      "webRequest",
+      "*://*.imgur.com/*"
     ],
     "content_scripts": [
         {
