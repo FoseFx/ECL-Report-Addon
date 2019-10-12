@@ -75,34 +75,37 @@ export default class MajorForm extends Vue {
 
     private async onSubmit() {
       // @ts-ignore
-      this.$refs.form.validate();
-      if (!this.valid) {
+      this.$refs.form.validate(); // ask vuetify to validate form once again
+      if (!this.valid) { // return if not valid, this wont include the Proof Components in mode = 0
         return;
       }
 
-      const proofs = this.$refs.proofs as ProofComponent[];
-      for (const proof of proofs) {
+      //
+      // Validate Proof Components
+      //
+      const proofs = this.$refs.proofs as ProofComponent[]; // all referenced proof components
+      for (const proof of proofs) {        
         if (!proof.valid()) {
           return;
         }
       }
 
-      let additionalLinksData: Array<{link: string}> = [];
+      let additionalLinksData: Array<{links: string}> = [];
 
       for (const proof of proofs) {
         if (proof.mode === 1) {
-          additionalLinksData.push({link: proof.urlValue});
+          additionalLinksData.push({links: proof.urlValue});
         } else {
           const drop = proof.$refs.drop as DropComponent;
-          const resp = await this.uploadToImgur(drop.stagingFiles as FileList);
-          const toConcat = resp.map((s: string) => ({link: s}));
+          const resp = await this.uploadToImgur(drop.stagingFiles as FileList);          
+          const toConcat = resp.map((s: string) => ({links: s}));
           additionalLinksData = additionalLinksData.concat(toConcat);
         }
       }
 
-      console.log(additionalLinksData);
-
-
+      //
+      // tell parent to show captcha by passing the data to it
+      //
       this.$emit('submitted', {
         emailReport: this.emailReport,
         data: {
@@ -111,22 +114,25 @@ export default class MajorForm extends Vue {
           additionalLinksData,
         },
       });
+
+      //
+      // Reset UI for next use
+      //
+
       // @ts-ignore
       this.$refs.form.reset();
     }
 
     private async uploadToImgur(files: FileList): Promise<string[]> {
       const array: string[] = [];
-      for (const file of Array.from(files)) {
-        console.log(file);
-        
+      for (const file of Array.from(files)) {        
         const body = new FormData();
         body.append('image', file);
         body.append('type', 'file');
         body.append('name', file.name);
         body.append('title', 'Image uploaded by the ECL-Report-Addon');
 
-        const res = await fetch('https://api.imgur.com/v3/upload', { // fuck you imgur, now I have to host a cors proxy
+        const res = await fetch('https://api.imgur.com/v3/upload', { // We bypass CORS by requesting permission for imgur.com in manifest.json
           method: 'POST',
           headers: {
             Authorization: 'Client-ID 5d7cf2731f6b345',
