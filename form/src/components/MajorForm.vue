@@ -1,5 +1,5 @@
 <template>
-  <v-form v-model="valid" ref="form" @submit.prevent="onSubmit" v-bind:disabled="blockEverything">
+  <v-form v-model="valid" ref="form" @submit.prevent="onSubmit" :class="{blocked: blockEverything}">
       <v-container fluid>
         <p>Offence/Reason</p>
         <v-radio-group v-model="why" :mandatory="true" :rules="[v => !!v || 'Item is required']">
@@ -74,6 +74,9 @@ export default class MajorForm extends Vue {
     private proofs = [0];
 
     private async onSubmit() {
+      if (this.blockEverything) {
+        return;
+      }
       // @ts-ignore
       this.$refs.form.validate(); // ask vuetify to validate form once again
       if (!this.valid) { // return if not valid, this wont include the Proof Components in mode = 0
@@ -187,5 +190,9 @@ export default class MajorForm extends Vue {
 </script>
 
 <style lang="scss" scoped>
-
+.blocked {
+  opacity: 0.6;
+  cursor: default;
+  pointer-events: none;
+}
 </style>

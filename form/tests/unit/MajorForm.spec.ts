@@ -22,6 +22,26 @@ describe('MajorForm.vue', () => {
         expect(wrapper).toBeTruthy();
     });
 
+    it('should block submit when blockeEverything is on', async () => {
+        const stub = jest.fn();
+
+        // @ts-ignore
+        wrapper.vm.$refs.form = {validate: stub};
+
+        /* Valid Form Data */
+        wrapper.setData({
+            valid: true,
+            why: 'toxic',
+            subject: 'some subject some subject some subject some subject some subject',
+            emailReport: false,
+            blockEverything: true,
+        });
+        // @ts-ignore
+        await wrapper.vm.onSubmit();
+
+        expect(stub).not.toHaveBeenCalled();
+    });
+
 
     it('should submit', async () => {
         /* Valid Form Data */
