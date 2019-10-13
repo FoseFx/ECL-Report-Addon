@@ -94,16 +94,7 @@ Code style and readability is important! Use `npm run lint` to check if your cod
 2. Activate `developer mode` in the upper right corner
 3. Click `load unpacked`
 
-<br><br><br><br><br><br>
-
-
-# TODO
-- Finish MinorForm
-- Going live
-- Dev: Windows support
-- Bug fixes
-- Some kind of imgur integration
-
+<br><br>
 
 [gh-release]: about:blank
 [mozilla]: about:blank
