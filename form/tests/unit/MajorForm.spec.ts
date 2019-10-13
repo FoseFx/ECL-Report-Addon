@@ -121,6 +121,31 @@ describe('MajorForm.vue', () => {
 
     });
 
+    it('should handle imgurUpload error in submit', async () => {
+        /* Valid Form Data */
+        wrapper.setData({
+            valid: true,
+            why: 'toxic',
+            subject: 'some subject some subject some subject some subject some subject',
+            emailReport: false,
+            blockeEverything: false,
+        });
+
+        // @ts-ignore
+        wrapper.vm.$refs.form = {validate: () => undefined, valid: () => true};
+
+        // @ts-ignore
+        wrapper.vm.$refs.proofs = [{valid: () => true, mode: 0, $refs: {drop: {stagingFiles: []}}}];
+
+        // @ts-ignore
+        wrapper.vm.uploadToImgur = () => Promise.reject('Some Error');
+
+        // @ts-ignore
+        await wrapper.vm.onSubmit();
+
+        expect(wrapper.emitted('submitted')).toEqual(undefined); // no new event
+    });
+
     it('should calc base64 of file', async () => {
         // @ts-ignore
         const res = await wrapper.vm.fileToBase64(new File(['some test string'], 'somefile.png'));
