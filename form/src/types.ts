@@ -13,8 +13,10 @@ export interface Report {
       division: string,
       matchroomLink: string,
       subject: string,
-      additionalLinksData: Array<{link: string}>,
+      additionalLinksData: AdditionalLinksData,
     };
     reportedUUID: string;
     reportedName: string;
 }
+
+export type AdditionalLinksData = Array<{link: string}>;

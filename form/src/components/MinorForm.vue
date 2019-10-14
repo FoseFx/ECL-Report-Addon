@@ -54,7 +54,7 @@
                         </v-text-field>
                     </v-col>
                     <v-col cols="1">
-                        <v-btn v-if="index !== 0" text height="65%" @click="additionalData.splice(index, 1)">
+                        <v-btn v-if="additionalData.length > 1" text height="65%" @click="additionalData.splice(index, 1)">
                             <v-icon >mdi-minus</v-icon>
                         </v-btn>
                     </v-col>
@@ -67,17 +67,22 @@
 
         <v-container>
             <p>Proof</p>
-            <v-row v-for="(_, index) in proof" v-bind:key="index">
-                <v-col cols="10">
-                    <v-text-field color="warning" label="Link to trusted source" required :rules="urlRules" v-model="proof[index].link"></v-text-field>
+            <v-row
+            no-gutters
+            v-for="(_, index) in proofs"
+            v-bind:key="index">
+                <v-col cols="11">
+                    <proof-component ref="proofs"></proof-component>
+                    <br>
                 </v-col>
-                <v-col cols="1">
-                    <v-btn text v-if="index !== 0" height="65%" @click="proof.splice(index, 1)">
+                <v-col cols="1" style="display: flex;align-items: center">
+                    <v-btn v-if="proofs.length > 1" text @click="proofs.splice(index, 1)">
                         <v-icon >mdi-minus</v-icon>
                     </v-btn>
                 </v-col>
             </v-row>
-            <v-btn text @click="proof.push({links: ''})" color="warning">
+
+            <v-btn text @click="proofs.push(proofs[proofs.length - 1] + 1)">
                 <v-icon left>mdi-plus</v-icon> add more
             </v-btn>
         </v-container>
@@ -97,13 +102,21 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { URLREGEX } from '../main';
+import {uploadToImgur} from '../imgur';
+import ProofComponent from './Proof/Proof.vue';
+import DropComponent from '@/components/Proof/Drop.vue';
+import {AdditionalLinksData} from "@/types";
 
 interface AdditionalDatum {
     additionalDataRound: string;
     additionalDataDetail: string;
 }
 
-@Component
+@Component({
+  components: {
+    ProofComponent,
+  },
+})
 export default class MinorForm extends Vue {
 
     private valid = false;
@@ -122,31 +135,36 @@ export default class MinorForm extends Vue {
     };
     private offenceInvalid = false;
     private additionalData: AdditionalDatum[] = [{additionalDataRound: '', additionalDataDetail: ''}];
-    private proof: Array<{link: string}> = [{link: ''}];
+    private proofs = [0];
 
-    private urlRules: Array<(s: string) => boolean|string> = [
-        (v) => !!v || 'When added it must be filled out',
-        (v) => URLREGEX.test(v) || 'Not a valid URL',
-    ];
-
-    private onSubmit(): boolean {
+    private async onSubmit(): Promise<boolean> {
         this.evalCheckboxes();
         // @ts-ignore
         this.$refs.form.validate();
         if (!this.valid || this.offenceInvalid) {
             return false;
         }
+        const proofs = this.$refs.proofs as ProofComponent[]; // all referenced proof components
+        for (const proof of proofs) {
+          if (!proof.valid()) {
+            return false;
+          }
+        }
         if (this.where === 'in-game') {
-            return this.onSubmitInGame();
+            return await this.onSubmitInGame();
         } else if (this.where === 'matchroom-chat') {
-            return this.onSubmitMatchroom();
+            return await this.onSubmitMatchroom();
         }
         return false;
     }
 
-    private onSubmitInGame(): boolean {
+    private async onSubmitInGame(): Promise<boolean> {
         const offences = this.evalCheckboxes();
-        const {proofLink, additionalLinksData} = this.evalLinks();
+        const evalRes = await this.evalLinks();
+        if (evalRes === null) {
+            return false;
+        }
+        const {proofLink, additionalLinksData} = evalRes;
         const additionalData = this.evalAdditionalData();
         const pl = {
             data: {
@@ -163,9 +181,13 @@ export default class MinorForm extends Vue {
         return true;
     }
 
-    private onSubmitMatchroom(): boolean {
+    private async onSubmitMatchroom(): Promise<boolean> {
         const offences = this.evalCheckboxes();
-        const {proofLink, additionalLinksData} = this.evalLinks();
+        const evalRes = await this.evalLinks();
+        if (evalRes === null) {
+            return false;
+        }
+        const {proofLink, additionalLinksData} = evalRes;
         const pl = {
             data: {
                 where: this.where,
@@ -180,13 +202,26 @@ export default class MinorForm extends Vue {
         return true;
     }
 
-    private evalLinks() {
-        const proofLink = this.proof.splice(0, 1)[0].link; // take first of proof
-        const additionalLinksData = [];
-        for (const link of this.proof) {
-            additionalLinksData.push({link: link.link});
+    private async evalLinks(): Promise<null|{proofLink: string, additionalLinksData: AdditionalLinksData}> {
+        let additionalLinksData: Array<{link: string}> = [];
+        const proofs = this.$refs.proofs as ProofComponent[]; // all referenced proof components
+        try {
+            for (const proof of proofs) {
+                if (proof.mode === 1) {
+                    additionalLinksData.push({link: proof.urlValue});
+                } else {
+                    const drop = proof.$refs.drop as DropComponent;
+                    const resp = await uploadToImgur(drop.stagingFiles as FileList);
+                    const toConcat = resp.map((s: string) => ({link: s}));
+                    additionalLinksData = additionalLinksData.concat(toConcat);
+                }
+            }
+            let proofLink = additionalLinksData.splice(0, 1)[0].link;  // take first of proof
+            return {proofLink, additionalLinksData};
+        } catch(error) {
+            console.error('Uploading to imgur failed', error);
+            return null;
         }
-        return {proofLink, additionalLinksData};
     }
 
     private evalAdditionalData() {

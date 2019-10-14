@@ -1,6 +1,8 @@
 import { Wrapper, createLocalVue, shallowMount } from '@vue/test-utils';
 import MinorForm from '@/components/MinorForm.vue';
 import vuetify from '@/plugins/vuetify';
+import ProofComponent from '@/components/Proof/Proof.vue';
+import * as imgur from '@/imgur';
 
 describe('MinorForm.vue', () => {
 
@@ -22,17 +24,7 @@ describe('MinorForm.vue', () => {
         expect(wrapper).toBeTruthy();
     });
 
-    it('shoud rule on URLs', () => {
-        const data = wrapper.vm.$data;
-        const {urlRules} = data;
-        expect(urlRules[0]('')).toEqual('When added it must be filled out');
-        expect(urlRules[0]('some val')).toEqual(true);
-
-        expect(urlRules[1]('some val')).toEqual('Not a valid URL');
-        expect(urlRules[1]('https://imgur.com/a/9bvgOzv')).toEqual(true);
-    });
-
-    it('should it should select right submit function', () => {
+    it('it should select right submit function', async () => {
         wrapper.vm.$refs.form = {
             validate: () => ({}),
             reset: () => ({}),
@@ -45,14 +37,16 @@ describe('MinorForm.vue', () => {
         const mrSpy = spyOn(wrapper.vm, 'onSubmitMatchroom');
         wrapper.setData({where: 'matchroom-chat', valid: true, offenceInvalid: false});
         // @ts-ignore
-        wrapper.vm.onSubmit();
+        wrapper.vm.$refs.proofs = [{valid: () => true}];
+        // @ts-ignore
+        await wrapper.vm.onSubmit();
         expect(inGSpy).not.toHaveBeenCalled();
         expect(mrSpy).toHaveBeenCalled();
         inGSpy.calls.reset();
         mrSpy.calls.reset();
         wrapper.setData({where: 'in-game', valid: true, offenceInvalid: false});
         // @ts-ignore
-        wrapper.vm.onSubmit();
+        await wrapper.vm.onSubmit();
         expect(inGSpy).toHaveBeenCalled();
         expect(mrSpy).not.toHaveBeenCalled();
 
@@ -60,22 +54,34 @@ describe('MinorForm.vue', () => {
 
         wrapper.setData({where: 'in-game', valid: false, offenceInvalid: false});
         // @ts-ignore
-        expect(wrapper.vm.onSubmit()).toEqual(false);
+        expect(await wrapper.vm.onSubmit()).toEqual(false);
         wrapper.setData({where: 'in-game', valid: true, offenceInvalid: true});
         // @ts-ignore
-        expect(wrapper.vm.onSubmit()).toEqual(false);
+        expect(await wrapper.vm.onSubmit()).toEqual(false);
 
     });
 
-    it('should evalLinks', () => {
-        wrapper.setData({proof: [{link: 'first url'}, {link: 'second url'}, {link: 'third url'}]});
+    it('should evalLinks', async () => {
+        const d = {drop: {stagingFiles: []}};
+        wrapper.vm.$refs.proofs = [
+            {mode: 1, urlValue: 'first url'},
+            {mode: 0, $refs: d},
+            {mode: 0, $refs: d},
+        ] as unknown as ProofComponent[];
+
         // @ts-ignore
-        expect(wrapper.vm.evalLinks()).toEqual(
+        imgur.uploadToImgur = jest.fn()
+            .mockResolvedValueOnce(['second url', 'third url'])
+            .mockResolvedValueOnce(['another url']);
+
+        // @ts-ignore
+        expect(await wrapper.vm.evalLinks()).toEqual(
             {
                 proofLink: 'first url',
                 additionalLinksData: [
                     {link: 'second url'},
                     {link: 'third url'},
+                    {link: 'another url'},
                 ],
             },
         );
@@ -111,17 +117,19 @@ describe('MinorForm.vue', () => {
         expect(wrapper.vm.$data.offenceInvalid).toEqual(true);
     });
 
-    it('should submit ingame', () => {
+    it('should submit ingame', async () => {
         // @ts-ignore
         spyOn(wrapper.vm, 'evalCheckboxes').and.returnValue(['rage']);
         // @ts-ignore
-        spyOn(wrapper.vm, 'evalLinks').and.returnValue({
-            proofLink: 'first url',
-            additionalLinksData: [
-                {link: 'snd url'},
-                {link: 'third url'},
-            ],
-        });
+        spyOn(wrapper.vm, 'evalLinks').and.returnValue(
+            Promise.resolve({
+                proofLink: 'first url',
+                additionalLinksData: [
+                    {link: 'snd url'},
+                    {link: 'third url'},
+                ],
+            }),
+        );
         // @ts-ignore
         spyOn(wrapper.vm, 'evalAdditionalData').and.returnValue([
             {round: 1, description: 'some descr'},
@@ -135,7 +143,7 @@ describe('MinorForm.vue', () => {
             where: 'in-game',
         });
         // @ts-ignore
-        expect(wrapper.vm.onSubmitInGame()).toEqual(true);
+        expect(await wrapper.vm.onSubmitInGame()).toEqual(true);
 
         expect(wrapper.emitted('submitted')).toEqual([
             [
@@ -158,17 +166,19 @@ describe('MinorForm.vue', () => {
         ]);
     });
 
-    it('should submit matchroom', () => {
+    it('should submit matchroom', async () => {
         // @ts-ignore
         spyOn(wrapper.vm, 'evalCheckboxes').and.returnValue(['rage']);
         // @ts-ignore
-        spyOn(wrapper.vm, 'evalLinks').and.returnValue({
-            proofLink: 'first url',
-            additionalLinksData: [
-                {link: 'snd url'},
-                {link: 'third url'},
-            ],
-        });
+        spyOn(wrapper.vm, 'evalLinks').and.returnValue(
+            Promise.resolve({
+                proofLink: 'first url',
+                additionalLinksData: [
+                    {link: 'snd url'},
+                    {link: 'third url'},
+                ],
+            }),
+        );
 
         wrapper.vm.$refs.form = {
             reset: () => ({}),
@@ -177,7 +187,7 @@ describe('MinorForm.vue', () => {
             where: 'matchroom-chat',
         });
         // @ts-ignore
-        expect(wrapper.vm.onSubmitMatchroom()).toEqual(true);
+        expect(await wrapper.vm.onSubmitMatchroom()).toEqual(true);
 
         expect(wrapper.emitted('submitted')).toEqual([
             [
