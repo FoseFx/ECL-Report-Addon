@@ -50,18 +50,18 @@ document.head.appendChild(el);
 
 browser.runtime.onMessage.addListener((req) => {
   if (req.type === 'REQUEST_REQUEST') {
-      return new Promise((resolve, reject) => {
-        const fn = (e) => {          
-          document.removeEventListener('ecl_report_addon_verification', fn);
-          const pl = req.data;
-          pl.recaptcha = e.detail;
-          sendRequest(pl)
-            .then((resp) => resp.json())
-            .then((resp) => resolve(resp))
-            .catch((err) => reject(err));
-        };
-        document.addEventListener('ecl_report_addon_verification', fn);
-      });
+    return new Promise((resolve, reject) => {
+      const fn = (e) => {
+        document.removeEventListener('ecl_report_addon_verification', fn);
+        const pl = req.data;
+        pl.recaptcha = e.detail;
+        sendRequest(pl)
+          .then((resp) => resp.json())
+          .then((resp) => resolve(resp))
+          .catch((err) => reject(err));
+      };
+      document.addEventListener('ecl_report_addon_verification', fn);
+    });
   }
 });
 

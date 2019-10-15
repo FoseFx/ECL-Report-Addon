@@ -16,47 +16,47 @@ injectCSS(browser.extension.getURL('content_scripts/app.css'));
 injectScript('app.js');
 
 function injectScript(name, isModule) {
-    const el = document.createElement('script');
-    el.src = browser.extension.getURL('content_scripts/' + name);
-    if (isModule) {
-        el.type = 'module';
-    }
-    document.head.appendChild(el);
+  const el = document.createElement('script');
+  el.src = browser.extension.getURL('content_scripts/' + name);
+  if (isModule) {
+    el.type = 'module';
+  }
+  document.head.appendChild(el);
 }
 function injectCSS(href) {
-    const el = document.createElement('link');
-    el.rel = 'stylesheet';
-    el.href = href;
-    document.head.appendChild(el);
+  const el = document.createElement('link');
+  el.rel = 'stylesheet';
+  el.href = href;
+  document.head.appendChild(el);
 }
 
 document.addEventListener('ecl_report_addon_query_built', (e) => {
-    const report = e.detail;
-    console.log('loader: listener: report', report);
-    const req = {
-        type: 'BUILT_QUERY',
-        data: report
-    };
-    browser.runtime.sendMessage(req).then((arg) => {
-        console.log('loader: promise then:', arg);
-        document.dispatchEvent(new CustomEvent('ecl_report_addon_fetch_success', {detail: arg}));
-    }).catch((arg) => {
-        console.log('loader: promise catch:', arg);
-        document.dispatchEvent(new CustomEvent('ecl_report_addon_fetch_failed', {detail: arg}));
-    });
+  const report = e.detail;
+  console.log('loader: listener: report', report);
+  const req = {
+    type: 'BUILT_QUERY',
+    data: report
+  };
+  browser.runtime.sendMessage(req).then((arg) => {
+    console.log('loader: promise then:', arg);
+    document.dispatchEvent(new CustomEvent('ecl_report_addon_fetch_success', {detail: arg}));
+  }).catch((arg) => {
+    console.log('loader: promise catch:', arg);
+    document.dispatchEvent(new CustomEvent('ecl_report_addon_fetch_failed', {detail: arg}));
+  });
 });
 
 document.addEventListener('ecl_report_addon_imgur_upload', (e) => {
-    const files = e.detail; // Array<{name, base64}>
-    const req = {
-        type: 'IMGUR_UPLOAD',
-        data: files
-    };
-    browser.runtime.sendMessage(req).then((array) => {
-        console.log('arrarray', array);
-        document.dispatchEvent(new CustomEvent('ecl_report_addon_imgur_upload_result', {detail: array}));
-    })
+  const files = e.detail; // Array<{name, base64}>
+  const req = {
+    type: 'IMGUR_UPLOAD',
+    data: files
+  };
+  browser.runtime.sendMessage(req).then((array) => {
+    console.log('arrarray', array);
+    document.dispatchEvent(new CustomEvent('ecl_report_addon_imgur_upload_result', {detail: array}));
+  })
     .catch((err) => {
-        document.dispatchEvent(new CustomEvent('ecl_report_addon_imgur_upload_result_error', {detail: err}));
+      document.dispatchEvent(new CustomEvent('ecl_report_addon_imgur_upload_result_error', {detail: err}));
     });
 });

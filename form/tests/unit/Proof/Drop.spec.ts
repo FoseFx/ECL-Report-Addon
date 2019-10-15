@@ -21,108 +21,108 @@ describe('DropComponent', () => {
   });
 
   it('should preventDefaultAndBubbling', () => {
-        const eventMock = {
-            preventDefault: jest.fn(),
-            stopPropagation: jest.fn(),
-        };
-        // @ts-ignore
-        wrapper.vm.preventDefaultAndBubbling(eventMock);
+    const eventMock = {
+      preventDefault: jest.fn(),
+      stopPropagation: jest.fn(),
+    };
+    // @ts-ignore
+    wrapper.vm.preventDefaultAndBubbling(eventMock);
 
-        expect(eventMock.preventDefault).toHaveBeenCalled();
-        expect(eventMock.stopPropagation).toHaveBeenCalled();
-    });
+    expect(eventMock.preventDefault).toHaveBeenCalled();
+    expect(eventMock.stopPropagation).toHaveBeenCalled();
+  });
   it('should setDraging', () => {
-        // @ts-ignore
-        wrapper.vm.preventDefaultAndBubbling = jest.fn();
-        wrapper.setData({isDraging: false});
+    // @ts-ignore
+    wrapper.vm.preventDefaultAndBubbling = jest.fn();
+    wrapper.setData({isDraging: false});
 
-        // @ts-ignore
-        wrapper.vm.setDraging({});
+    // @ts-ignore
+    wrapper.vm.setDraging({});
 
-        expect(wrapper.vm.$data.isDraging).toEqual(true);
+    expect(wrapper.vm.$data.isDraging).toEqual(true);
 
-        // @ts-ignore
-        expect(wrapper.vm.preventDefaultAndBubbling).toHaveBeenCalled();
-    });
+    // @ts-ignore
+    expect(wrapper.vm.preventDefaultAndBubbling).toHaveBeenCalled();
+  });
 
   it('should removeDraging', () => {
-        // @ts-ignore
-        wrapper.vm.preventDefaultAndBubbling = jest.fn();
-        wrapper.setData({isDraging: true});
+    // @ts-ignore
+    wrapper.vm.preventDefaultAndBubbling = jest.fn();
+    wrapper.setData({isDraging: true});
 
-        // @ts-ignore
-        wrapper.vm.removeDraging({});
+    // @ts-ignore
+    wrapper.vm.removeDraging({});
 
-        expect(wrapper.vm.$data.isDraging).toEqual(false);
+    expect(wrapper.vm.$data.isDraging).toEqual(false);
 
-        // @ts-ignore
-        expect(wrapper.vm.preventDefaultAndBubbling).toHaveBeenCalled();
-    });
+    // @ts-ignore
+    expect(wrapper.vm.preventDefaultAndBubbling).toHaveBeenCalled();
+  });
 
   it('should handle inputSelected', () => {
-        const afterSelectMock = jest.fn();
-        // @ts-ignore
-        wrapper.vm.afterSelect = afterSelectMock;
+    const afterSelectMock = jest.fn();
+    // @ts-ignore
+    wrapper.vm.afterSelect = afterSelectMock;
 
-        const eventMock = {target: {files: ['a']}};
-          // @ts-ignore
-        wrapper.vm.inputSelected(eventMock);
+    const eventMock = {target: {files: ['a']}};
+    // @ts-ignore
+    wrapper.vm.inputSelected(eventMock);
 
-        expect(afterSelectMock.mock.calls[0][0]).toEqual(['a']);
-        });
+    expect(afterSelectMock.mock.calls[0][0]).toEqual(['a']);
+  });
   it('should drop', () => {
-        const afterSelectMock = jest.fn();
-        const pdabMock = jest.fn();
-        // @ts-ignore
-        wrapper.vm.afterSelect = afterSelectMock;
-        // @ts-ignore
-        wrapper.vm.preventDefaultAndBubbling = pdabMock;
+    const afterSelectMock = jest.fn();
+    const pdabMock = jest.fn();
+    // @ts-ignore
+    wrapper.vm.afterSelect = afterSelectMock;
+    // @ts-ignore
+    wrapper.vm.preventDefaultAndBubbling = pdabMock;
 
-        // @ts-ignore
-        wrapper.vm.drop({dataTransfer: null});
-        expect(pdabMock).not.toHaveBeenCalled();
-        expect(afterSelectMock).not.toHaveBeenCalled();
+    // @ts-ignore
+    wrapper.vm.drop({dataTransfer: null});
+    expect(pdabMock).not.toHaveBeenCalled();
+    expect(afterSelectMock).not.toHaveBeenCalled();
 
 
 
-        const eventMock = {dataTransfer: {files: ['a']}};
-        // @ts-ignore
-        wrapper.vm.drop(eventMock);
+    const eventMock = {dataTransfer: {files: ['a']}};
+    // @ts-ignore
+    wrapper.vm.drop(eventMock);
 
-        expect(pdabMock).toHaveBeenCalled();
-        expect(afterSelectMock.mock.calls[0][0]).toEqual(['a']);
-    });
+    expect(pdabMock).toHaveBeenCalled();
+    expect(afterSelectMock.mock.calls[0][0]).toEqual(['a']);
+  });
 
   it('should handle afterSelect', () => {
-        wrapper.setData({stagingFiles: null, filename: '', hasSelected: false});
-        // @ts-ignore
-        wrapper.vm.afterSelect(null);
-        expect(wrapper.vm.$data.hasSelected).toEqual(false);
+    wrapper.setData({stagingFiles: null, filename: '', hasSelected: false});
+    // @ts-ignore
+    wrapper.vm.afterSelect(null);
+    expect(wrapper.vm.$data.hasSelected).toEqual(false);
 
 
-        // @ts-ignore
-        wrapper.vm.afterSelect([]);
-        expect(wrapper.vm.$data.hasSelected).toEqual(false);
+    // @ts-ignore
+    wrapper.vm.afterSelect([]);
+    expect(wrapper.vm.$data.hasSelected).toEqual(false);
 
 
-        // @ts-ignore
-        wrapper.vm.afterSelect([{name: 'a'}]);
-        expect(wrapper.vm.$data.filename).toEqual('a');
+    // @ts-ignore
+    wrapper.vm.afterSelect([{name: 'a'}]);
+    expect(wrapper.vm.$data.filename).toEqual('a');
 
-        // @ts-ignore
-        wrapper.vm.afterSelect(['a', 'b', 'c']);
-        expect(wrapper.vm.$data.filename).toEqual('3 items');
+    // @ts-ignore
+    wrapper.vm.afterSelect(['a', 'b', 'c']);
+    expect(wrapper.vm.$data.filename).toEqual('3 items');
 
-        expect(wrapper.vm.$data.stagingFiles).toEqual(['a', 'b', 'c']);
+    expect(wrapper.vm.$data.stagingFiles).toEqual(['a', 'b', 'c']);
 
-    });
+  });
 
   it('should return whether MIME of file is allowed', () => {
-      // @ts-ignore
-      expect(wrapper.vm.isAllowedMime({type: 'image/lmao'})).toEqual(false);
-      // @ts-ignore
-      expect(wrapper.vm.isAllowedMime({type: 'image/jpeg'})).toEqual(true);
-    });
+    // @ts-ignore
+    expect(wrapper.vm.isAllowedMime({type: 'image/lmao'})).toEqual(false);
+    // @ts-ignore
+    expect(wrapper.vm.isAllowedMime({type: 'image/jpeg'})).toEqual(true);
+  });
 
   it('should return whether component is valid', () => {
     wrapper.setData({stagingFiles: null, filename: '', hasSelected: false});
