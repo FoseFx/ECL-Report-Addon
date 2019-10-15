@@ -100,14 +100,13 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
-import { URLREGEX } from '../main';
-import {uploadToImgur} from '../imgur';
-import ProofComponent from './Proof/Proof.vue';
-import DropComponent from '@/components/Proof/Drop.vue';
-import {AdditionalLinksData} from '@/types';
+    import {Component, Vue} from "vue-property-decorator";
+    import {uploadToImgur} from "../imgur";
+    import ProofComponent from "./Proof/Proof.vue";
+    import DropComponent from "@/components/Proof/Drop.vue";
+    import {AdditionalLinksData} from "@/types";
 
-interface AdditionalDatum {
+    interface AdditionalDatum {
     additionalDataRound: string;
     additionalDataDetail: string;
 }
