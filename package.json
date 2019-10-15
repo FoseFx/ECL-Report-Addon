@@ -18,7 +18,7 @@
   "author": "FoseFx <info@fosefx.com>",
   "license": "Other",
   "devDependencies": {
-    "@types/jest": "^24.0.18",
+    "@types/jest": "^24.0.19",
     "glob": "^7.1.4",
     "husky": "^3.0.9",
     "jest": "^24.9.0",
