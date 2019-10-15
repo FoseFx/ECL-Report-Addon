@@ -60,21 +60,21 @@ describe('FormCard', () => {
     wrapper.setData({tab: 0});
     wrapper.find(MajorForm).vm.$emit('submitted', {
       emailReport: false,
-        data: {
-          why: 'idk',
-          subject: 'it happened, ok?',
-          additionalLinksData: 'http://please/belive.me?ok=yes',
-        },
+      data: {
+        why: 'idk',
+        subject: 'it happened, ok?',
+        additionalLinksData: 'http://please/belive.me?ok=yes',
+      },
     });
 
     wrapper.setData({tab: 1, stageTwo: false, done: false, error: ''});
     wrapper.find(MajorForm).vm.$emit('submitted', {
       emailReport: false,
-        data: {
-          why: 'idk',
-          subject: 'it happened, ok?',
-          additionalLinksData: 'http://please/belive.me?ok=yes',
-        },
+      data: {
+        why: 'idk',
+        subject: 'it happened, ok?',
+        additionalLinksData: 'http://please/belive.me?ok=yes',
+      },
     });
   });
   it('should close', () => {

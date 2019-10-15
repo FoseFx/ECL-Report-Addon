@@ -1,21 +1,21 @@
 <template>
- <v-card
+  <v-card
     class="mx-auto"
     outlined
   >
     <div v-if="!done && division !== 'legends'">
-        <v-list-item three-line>
-          <v-list-item-content>
-            <div class="overline mb-4">Report</div>
-            <v-list-item-title class="headline mb-1">Report player '{{reportedName}}'</v-list-item-title>
-            <p>Division: {{division}}</p>
-          </v-list-item-content>
+      <v-list-item three-line>
+        <v-list-item-content>
+          <div class="overline mb-4">Report</div>
+          <v-list-item-title class="headline mb-1">Report player '{{reportedName}}'</v-list-item-title>
+          <p>Division: {{division}}</p>
+        </v-list-item-content>
 
-          <v-list-item-avatar
-            size="80"
-            color="grey">
-            <img v-if="avatar" v-bind:src="avatar">
-           </v-list-item-avatar>
+        <v-list-item-avatar
+          size="80"
+          color="grey">
+          <img v-if="avatar" v-bind:src="avatar">
+        </v-list-item-avatar>
       </v-list-item>
       <v-list-item>
         <v-list-item-content>
@@ -40,12 +40,12 @@
             <MajorForm v-on:submitted="onSubmit"></MajorForm>
           </v-card>
         </v-tab-item>
-        
+
       </v-tabs-items>
-    
-      <iframe 
-        ref="eclframe" 
-        v-bind:class="{'zero-opacity': !stageTwo}" 
+
+      <iframe
+        ref="eclframe"
+        v-bind:class="{'zero-opacity': !stageTwo}"
         src="https://report.ecl.gg/"
         width="100%"
         v-if="showIframe"
@@ -60,7 +60,7 @@
     <v-card-title v-if="done">Done</v-card-title>
     <v-card-text v-if="done && error">An error occured making the request... {{error}}</v-card-text>
 
-    
+
     <v-card-actions>
       <v-btn @click="close" outlined text>Close</v-btn>
     </v-card-actions>
@@ -69,105 +69,105 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
-import MinorForm from './MinorForm.vue';
-import MajorForm from './MajorForm.vue';
-import { Report } from '../types';
+    import { Component, Vue, Prop } from 'vue-property-decorator';
+    import MinorForm from './MinorForm.vue';
+    import MajorForm from './MajorForm.vue';
+    import { Report } from '../types';
 
-@Component({
-    components: {
-        MinorForm,
-        MajorForm,
-    },
-})
-export default class FormCard extends Vue {
-    @Prop() public division!: string;
-    @Prop() public complainantUUID!: string;
-    @Prop() public complainantName!: string;
-    @Prop() public reportedUUID!: string;
-    @Prop() public reportedName!: string;
-    @Prop() public email!: string;
-    @Prop() public avatar!: string;
-    @Prop() public visible!: boolean;
+    @Component({
+        components: {
+            MinorForm,
+            MajorForm,
+        },
+    })
+    export default class FormCard extends Vue {
+        @Prop() public division!: string;
+        @Prop() public complainantUUID!: string;
+        @Prop() public complainantName!: string;
+        @Prop() public reportedUUID!: string;
+        @Prop() public reportedName!: string;
+        @Prop() public email!: string;
+        @Prop() public avatar!: string;
+        @Prop() public visible!: boolean;
 
-    private stageTwo = false;
-    private done = false;
-    private error = '';
-    private showIframe = true;
-    private tab = 0;
+        private stageTwo = false;
+        private done = false;
+        private error = '';
+        private showIframe = true;
+        private tab = 0;
 
-    constructor() {
-      super();
+        constructor() {
+            super();
 
-      // escape-key should close form
-      window.addEventListener('keydown', (e: KeyboardEvent) => {
-        if (e.key === 'Escape' && this.visible) { // should not trigger when closed
-          e.preventDefault();
-          e.stopPropagation(); // stop any further bubbling of the event
-          this.close();
+            // escape-key should close form
+            window.addEventListener('keydown', (e: KeyboardEvent) => {
+                if (e.key === 'Escape' && this.visible) { // should not trigger when closed
+                    e.preventDefault();
+                    e.stopPropagation(); // stop any further bubbling of the event
+                    this.close();
+                }
+            });
+
         }
-      });
 
-    }
+        public onSubmit(event: Report) {
+            const type = this.tab === 0 ? 'minor' : 'major';
+            const report: Report = Object.assign({
+                type,
+                service: 'classical',
+                complainantName: this.complainantName,
+                complainantUUID: this.complainantUUID,
+                email: this.email,
+                reportedUUID: this.reportedUUID,
+                reportedName: this.reportedName,
+            }, event);
+            if (type === 'major') {
+                report.emailPub = false;
+            }
+            report.data.division = this.division;
+            report.data.matchroomLink = document.location.href;
+            this.stageTwo = true;
+            document.dispatchEvent(new CustomEvent('ecl_report_addon_query_built', {detail: report}));
+            this.addListeners();
+        }
 
-    public onSubmit(event: Report) {
-      const type = this.tab === 0 ? 'minor' : 'major';
-      const report: Report = Object.assign({
-        type,
-        service: 'classical',
-        complainantName: this.complainantName,
-        complainantUUID: this.complainantUUID,
-        email: this.email,
-        reportedUUID: this.reportedUUID,
-        reportedName: this.reportedName,
-      }, event);
-      if (type === 'major') {
-        report.emailPub = false;
-      }
-      report.data.division = this.division;
-      report.data.matchroomLink = document.location.href;
-      this.stageTwo = true;
-      document.dispatchEvent(new CustomEvent('ecl_report_addon_query_built', {detail: report}));
-      this.addListeners();
-    }
+        private addListeners() {
+            const fne = (e: CustomEvent) => {
+                this.done = true;
+                this.error = e.detail;
+                // @ts-ignore
+                document.removeEventListener('ecl_report_addon_fetch_failed', fne);
+                // @ts-ignore
+                document.removeEventListener('ecl_report_addon_fetch_success', fns);
+            };
+            const fns = (e: CustomEvent) => {
+                this.done = true;
+                this.error = '';
+                // @ts-ignore
+                document.removeEventListener('ecl_report_addon_fetch_failed', fne);
+                // @ts-ignore
+                document.removeEventListener('ecl_report_addon_fetch_success', fns);
+            };
+            // @ts-ignore
+            document.addEventListener('ecl_report_addon_fetch_failed', fne);
+            // @ts-ignore
+            document.addEventListener('ecl_report_addon_fetch_success', fns);
+        }
 
-    private addListeners() {
-      const fne = (e: CustomEvent) => {
-        this.done = true;
-        this.error = e.detail;
-        // @ts-ignore
-        document.removeEventListener('ecl_report_addon_fetch_failed', fne);
-        // @ts-ignore
-        document.removeEventListener('ecl_report_addon_fetch_success', fns);
-      };
-      const fns = (e: CustomEvent) => {
-        this.done = true;
-        this.error = '';
-        // @ts-ignore
-        document.removeEventListener('ecl_report_addon_fetch_failed', fne);
-        // @ts-ignore
-        document.removeEventListener('ecl_report_addon_fetch_success', fns);
-      };
-      // @ts-ignore
-      document.addEventListener('ecl_report_addon_fetch_failed', fne);
-      // @ts-ignore
-      document.addEventListener('ecl_report_addon_fetch_success', fns);
+        private close() {
+            this.$emit('close');
+            this.stageTwo = false;
+            this.done = false;
+            this.error = '';
+            this.tab = 0;
+            this.showIframe = false;
+            setTimeout(() => { this.showIframe = true; }, 500);
+        }
     }
-
-    private close() {
-      this.$emit('close');
-      this.stageTwo = false;
-      this.done = false;
-      this.error = '';
-      this.tab = 0;
-      this.showIframe = false;
-      setTimeout(() => { this.showIframe = true; }, 500);
-    }
-}
 </script>
 
 <style scoped>
-.zero-opacity {
-  opacity: 0;
-}
+  .zero-opacity {
+    opacity: 0;
+  }
 </style>

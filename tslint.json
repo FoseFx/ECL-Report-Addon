@@ -4,13 +4,6 @@
       "only-arrow-functions": false,
       "array-type": false,
       "arrow-parens": false,
-      "deprecation": {
-        "severity": "warn"
-      },
-      "import-blacklist": [
-        true,
-        "rxjs/Rx"
-      ],
       "interface-name": false,
       "max-classes-per-file": false,
       "max-line-length": [
@@ -57,7 +50,7 @@
         true,
         "single"
       ],
-      "trailing-comma": false
+      "trailing-comma": true,
+      "indent": [true, "spaces", 2]
     }
   }
-  
