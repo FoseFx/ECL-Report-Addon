@@ -92,7 +92,7 @@
 
     <v-container>
       <v-btn v-bind:disabled="!valid || offenceInvalid" @click="onSubmit" large outlined color="warning">
-        Submit
+        Next
       </v-btn>
     </v-container>
 
@@ -253,5 +253,8 @@ export default class MinorForm extends Vue {
 <style lang="scss" scoped>
   .v-input--checkbox {
     margin-top: 0!important;
+  }
+  .v-input--selection-controls.v-input--checkbox {
+    padding: 0;
   }
 </style>
