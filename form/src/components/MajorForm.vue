@@ -60,6 +60,7 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import ProofComponent from './Proof/Proof.vue';
 import DropComponent from './Proof/Drop.vue';
 import { uploadToImgur } from '../imgur';
+import {AdditionalLinksData} from "@/types";
 
 @Component({
     components: {
@@ -94,17 +95,17 @@ export default class MajorForm extends Vue {
             }
         }
 
-        let additionalLinksData: Array<{links: string}> = [];
+        let additionalLinksData: AdditionalLinksData = [];
 
         try {
             this.blockEverything = true;
             for (const proof of proofs) {
                 if (proof.mode === 1) {
-                    additionalLinksData.push({links: proof.urlValue});
+                    additionalLinksData.push({link: proof.urlValue});
                 } else {
                     const drop = proof.$refs.drop as DropComponent;
                     const resp = await uploadToImgur(drop.stagingFiles as FileList);
-                    const toConcat = resp.map((s: string) => ({links: s}));
+                    const toConcat = resp.map((s: string) => ({link: s}));
                     additionalLinksData = additionalLinksData.concat(toConcat);
                 }
             }

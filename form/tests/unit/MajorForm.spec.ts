@@ -93,8 +93,8 @@ describe('MajorForm.vue', () => {
         emailReport: false,
         data: {
           additionalLinksData: [
-            {links: 'https://nice.acme'},
-            {links: 'https://uploaded.test'},
+            {link: 'https://nice.acme'},
+            {link: 'https://uploaded.test'},
           ],
           subject: 'some subject some subject some subject some subject some subject',
           why: 'toxic',
@@ -109,7 +109,7 @@ describe('MajorForm.vue', () => {
       valid: false,
       why: 'toxic',
       subject: '',
-      additionalLinksData: [{links: ''}],
+      additionalLinksData: [{link: ''}],
       emailReport: true,
     });
 
