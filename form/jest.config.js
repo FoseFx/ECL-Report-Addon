@@ -32,7 +32,8 @@ module.exports = {
   ],
   globals: {
     'ts-jest': {
-      babelConfig: true
+      tsConfig: './tsconfig.json',
+      compiler: 'typescript'
     }
   }
 }
