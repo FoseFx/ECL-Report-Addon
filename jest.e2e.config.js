@@ -1,7 +1,6 @@
 module.exports = {
     "roots": [
-      "<rootDir>/content_scripts",
-      "<rootDir>/background"
+      "<rootDir>/e2e/tests",
     ],
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
@@ -10,5 +9,8 @@ module.exports = {
       "ts-jest": {
         "tsConfig": "tsconfig.content_scripts.dev.json"
       }
-    }
+    },
+  "setupFilesAfterEnv": [
+      "<rootDir>/e2e/init.ts",
+  ],
 };

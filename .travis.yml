@@ -4,11 +4,14 @@ branches:
 language: node_js
 node_js:
 - 10
+addons:
+  firefox: latest-dev
 before_script:
 - "npm run setup"
 script:
 - "npm run lint"
 - "npm run test"
+- "npm run e2e"
 - "npm run build:prod"
 after_script:
 - "bash <(curl -s https://codecov.io/bash) -t $(echo $UPLOAD_TOKEN)"
