@@ -11,8 +11,8 @@
     "tsc:prod": "tsc -b tsconfig.content_scripts.prod.json",
     "test:cs": "jest --coverage",
     "test": "npm run test:cs && cd form && npm run test:unit && cd ..",
-    "lint": "tslint -c tslint.json content_scripts/*.ts",
-    "lint:fix": "tslint -c tslint.json content_scripts/*.ts --fix",
+    "lint": "tslint -c tslint.json content_scripts/*.ts background/*.ts",
+    "lint:fix": "tslint -c tslint.json content_scripts/*.ts background/*.ts --fix",
     "e2e": "node scripts/e2e.js && npx jest --config jest.e2e.config.js"
   },
   "keywords": [],

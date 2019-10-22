@@ -1,6 +1,17 @@
-// @ts-ignore
-window.browser = {runtime: {onMessage: {addListener: () => {}}}, tabs: {sendMessage: (...args) => args, query: () => Promise.resolve([{id: 1}])}};
+(window as any).browser = {
+  runtime: {
+    onMessage: {
+      addListener: () => {}
+    }
+  },
+  tabs: {
+    sendMessage: (...args: any) => args,
+    query: () => Promise.resolve([{id: 1}])
+  }
+};
+
 import {obj} from './msg_broker';
+
 
 it('should exec', () => {
   expect(obj.handleMsg).toBeTruthy();

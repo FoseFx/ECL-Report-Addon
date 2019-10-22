@@ -5,6 +5,8 @@ interface MsgRequest<T> {
   data?: T;
 }
 
+declare let browser: any;
+
 export const obj =  {
 
   handleMsg: (req: MsgRequest<any>) => {
@@ -22,11 +24,9 @@ export const obj =  {
   },
   sendMsgToECL: async (req: MsgRequest<Report>) => {
     console.log('sendMsgToECL', req);
-    // @ts-ignore
     const tabs = await browser.tabs.query({
       active: true
     });
-    // @ts-ignore
     return browser.tabs.sendMessage(tabs[0].id, req) as Promise<any>;
   },
   uploadToImgur: async (files: Array<{base64: string, name: string}>) => {
@@ -45,7 +45,7 @@ export const obj =  {
           Origin: 'https://api.imgur.com/',
           Accept: 'application/json'
         },
-        body: body,
+        body,
       });
       const json = await res.json();
       array.push(json.data.link);
@@ -55,7 +55,6 @@ export const obj =  {
 
 };
 
-// @ts-ignore
 browser.runtime.onMessage.addListener(
   obj.handleMsg
 );

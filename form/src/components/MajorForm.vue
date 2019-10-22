@@ -60,7 +60,7 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import ProofComponent from './Proof/Proof.vue';
 import DropComponent from './Proof/Drop.vue';
 import { uploadToImgur } from '../imgur';
-import {AdditionalLinksData} from "@/types";
+import {AdditionalLinksData} from '@/types';
 
 @Component({
     components: {
