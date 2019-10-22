@@ -25,7 +25,12 @@ describe('FaceitLoader (e2e)', function() {
     let appScriptFound = false;
 
     for (const element of headElements) {
-      const tn: string = await element.getTagName();
+      let tn: string;
+      try {
+        tn = await element.getTagName(); // get TagName
+      } catch (e) {
+        continue;
+      }
 
       if (tn !== 'script') {
         continue;
@@ -52,7 +57,12 @@ describe('FaceitLoader (e2e)', function() {
     let iconsCssFound = false;
 
     for (const element of headElements) {
-      const tn: string = await element.getTagName();
+      let tn: string;
+      try {
+        tn = await element.getTagName(); // get TagName
+      } catch (e) {
+        continue;
+      }
       if (tn === 'link') {
         const rel = await element.getAttribute('rel');
         if (rel !== 'stylesheet') {
