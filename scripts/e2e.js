@@ -8,6 +8,4 @@ const run = require('./run');
   await run('zip -r addon.xpi *');
   process.chdir('../');
   console.log('\x1b[32m%s\x1b[0m', 'Starting End to End Tests');
-  await run('npx jest --config jest.e2e.config.js');
-  console.log('\n\x1b[32m%s\x1b[0m', 'End to End Tests Done\n\n');
 })();
