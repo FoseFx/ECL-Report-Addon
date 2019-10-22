@@ -13,7 +13,8 @@
     "test": "npm run test:cs && cd form && npm run test:unit && cd ..",
     "lint": "tslint -c tslint.json content_scripts/*.ts background/*.ts",
     "lint:fix": "tslint -c tslint.json content_scripts/*.ts background/*.ts --fix",
-    "e2e": "node scripts/e2e.js && npx jest --config jest.e2e.config.js"
+    "e2e": "node scripts/e2e.js && npx jest --config jest.e2e.config.js",
+    "e2e:nobuild": "node scripts/e2e.js --no-build && npx jest --config jest.e2e.config.js"
   },
   "keywords": [],
   "author": "FoseFx <info@fosefx.com>",
@@ -35,7 +36,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "npm run lint && npm test",
-      "pre-push": "npm run lint && npm test && npm run build:prod"
+      "pre-push": "npm run lint && npm test && npm run build:prod && npm run e2e:nobuild"
     }
   }
 }
