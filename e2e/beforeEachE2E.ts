@@ -7,17 +7,16 @@ export default function beforeEachE2E() {
     .headless()
     .setPreference('xpinstall.signatures.required', false)
     .setPreference('xpinstall.whitelist.required', false)
-    .setPreference('network.proxy.type', 1)
-    .setPreference('network.proxy.http', 'localhost')
-    .setPreference('network.proxy.http_port', 8888)
-    .setPreference('network.proxy.ssl', 'localhost')
-    .setPreference('network.proxy.ssl_port', 8888)
-    .setPreference('network.proxy.proxy_over_tls', true)
     .addExtensions(path.join(__dirname, '../dist/addon.xpi'));
 
   return new webdriver.Builder()
     .withCapabilities({
-      acceptInsecureCerts: true
+      acceptInsecureCerts: true,
+      proxy: {
+        proxyType: 'manual',
+        httpProxy: 'localhost:8888',
+        sslProxy: 'localhost:8888'
+      }
     })
     .forBrowser('firefox')
     .setFirefoxOptions(ffOptions)
