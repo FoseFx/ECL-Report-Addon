@@ -75,6 +75,9 @@ This project uses the [jest](https://jestjs.io/) test runner.
 
 Run `npm test` to run all tests and to generate a coverage report (open using `firefox coverage/lconv-report/index.html`)
 
+Run `npm run e2e` to run all End to End tests.
+This requires docker to be installed and `firefox` to exist in yor path.
+
 ## Linting
 Code style and readability is important! Use `npm run lint` to check if your code is compliant, if not try `npm run lint:fix` and/or manually fix it.
 
