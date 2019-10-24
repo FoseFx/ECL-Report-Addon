@@ -25,11 +25,11 @@ function replaceInFile(file, find, replace) {
 }
 
 async function copyDirectory(src, dest, absolute) {
-  if (!absolute) {
-    src = path.join(__dirname, src);
-    dest = path.join(__dirname, dest);
-  }
   if (process.platform === 'win32') {
+    if (!absolute) {
+      src = path.join(__dirname, src);
+      dest = path.join(__dirname, dest);
+    }
     await run(`Xcopy /E /I ${src} ${dest}`);
   } else {
     await run(`cp -r ${src} ${dest}`);
