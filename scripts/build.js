@@ -33,6 +33,15 @@ async function copyDirectory(src, dest) {
     await run(`cp -r ${src} ${dest}`);
   }
 }
+async function copyFile(src, dest) {
+  if (process.platform === 'win32') {
+    src = src.replace(/\//g, '\\');
+    dest = dest.replace(/\//g, '\\');
+    await run(`copy ${src} ${dest}`);
+  } else {
+    await run(`cp ${src} ${dest}`);
+  }
+}
 
 (async () => {
   console.log('\n\x1b[32m%s\x1b[0m', 'Starting ' + arg.toLocaleUpperCase() + ' build');
@@ -44,8 +53,8 @@ async function copyDirectory(src, dest) {
   await removeDir("dist/form");  // we dont need this
   replaceInFile(path.join(process.cwd(), 'dist/content_scripts/faceit.js'), 'export', ''); // remove 'export' from file
   replaceInFile(path.join(process.cwd(), 'dist/background/msg_broker.js'), 'export', ''); // x2
-  await copyDirectory("node_modules/webextension-polyfill/dist/browser-polyfill.min.js", "dist/browser-polyfill.min.js");  // copy polyfill to scripts
-  await copyDirectory("manifest.json", "dist/manifest.json");  // copy manifest over
+  await copyFile("node_modules/webextension-polyfill/dist/browser-polyfill.min.js", "dist/browser-polyfill.min.js");  // copy polyfill to scripts
+  await copyFile("manifest.json", "dist/manifest.json");  // copy manifest over
   process.chdir('form');
   console.log('\x1b[32m%s\x1b[0m', 'Building Form');
   await run("npm run build");  // build form
