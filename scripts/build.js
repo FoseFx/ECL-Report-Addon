@@ -44,8 +44,8 @@ async function copyDirectory(src, dest) {
   await removeDir("dist/form");  // we dont need this
   replaceInFile(path.join(process.cwd(), 'dist/content_scripts/faceit.js'), 'export', ''); // remove 'export' from file
   replaceInFile(path.join(process.cwd(), 'dist/background/msg_broker.js'), 'export', ''); // x2
-  await run("cp node_modules/webextension-polyfill/dist/browser-polyfill.min.js dist/browser-polyfill.min.js");  // copy polyfill to scripts
-  await run("cp manifest.json dist/.");  // copy manifest over
+  await copyDirectory("node_modules/webextension-polyfill/dist/browser-polyfill.min.js", "dist/browser-polyfill.min.js");  // copy polyfill to scripts
+  await copyDirectory("manifest.json", "dist/manifest.json");  // copy manifest over
   process.chdir('form');
   console.log('\x1b[32m%s\x1b[0m', 'Building Form');
   await run("npm run build");  // build form
