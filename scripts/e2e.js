@@ -15,6 +15,14 @@ async function compressAndRename() {
     process.chdir('../');
   }
 }
+async function buildProxy() {
+  if (process.platform === 'win32') {
+    await run('docker build -t ecl-proxy -f e2e/proxy/windows.Dockerfile e2e/proxy');
+  }
+  else {
+    await run('docker build -t ecl-proxy e2e/proxy');
+  }
+}
 
 (async () => {
   console.log('\n\x1b[32m%s\x1b[0m', 'Preparing End to End Tests');  
@@ -22,7 +30,7 @@ async function compressAndRename() {
     await run('npm run build:dev');
   }
   await compressAndRename();
-  await run('docker build -t ecl-proxy e2e/proxy');
+  await buildProxy();
   await run('docker run --rm --name ecl-proxy -p 8888:8080 -d ecl-proxy');
   console.log('\x1b[32m%s\x1b[0m', 'Starting End to End Tests');
 })();

@@ -14,3 +14,4 @@ jobs:
     - run: npm run setup
     - run: npm run build:prod
     - run: npm test
+    - run: npm run e2e:nobuild
