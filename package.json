@@ -13,8 +13,8 @@
     "test": "npm run test:cs && cd form && npm run test:unit && cd ..",
     "lint": "tslint -c tslint.json content_scripts/*.ts background/*.ts",
     "lint:fix": "tslint -c tslint.json content_scripts/*.ts background/*.ts --fix",
-    "e2e": "node scripts/e2e.js && npx jest --config jest.e2e.config.js && docker logs ecl-proxy && docker kill ecl-proxy",
-    "e2e:nobuild": "node scripts/e2e.js --no-build && npx jest --config jest.e2e.config.js && docker logs ecl-proxy && docker kill ecl-proxy"
+    "e2e": "node scripts/e2e.js && npx jest --config jest.e2e.config.js && npx jest --config jest.e2e.config.chrome.js && docker logs ecl-proxy && docker kill ecl-proxy",
+    "e2e:nobuild": "node scripts/e2e.js --no-build && npx jest --config jest.e2e.config.js && npx jest --config jest.e2e.config.chrome.js && docker logs ecl-proxy && docker kill ecl-proxy"
   },
   "keywords": [],
   "author": "FoseFx <info@fosefx.com>",
@@ -22,6 +22,7 @@
   "devDependencies": {
     "@types/jest": "^24.0.19",
     "@types/node": "^12.11.6",
+    "chromedriver": "^77.0.0",
     "geckodriver": "^1.19.0",
     "glob": "^7.1.5",
     "husky": "^3.0.9",
