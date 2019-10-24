@@ -24,12 +24,10 @@ function replaceInFile(file, find, replace) {
   fs.writeFileSync(file, ncontent, 'utf-8');
 }
 
-async function copyDirectory(src, dest, absolute) {
+async function copyDirectory(src, dest) {
   if (process.platform === 'win32') {
-    if (!absolute) {
-      src = path.join(__dirname, src);
-      dest = path.join(__dirname, dest);
-    }
+    src = src.replace(/\//g, '\\');
+    dest = dest.replace(/\//g, '\\');
     await run(`Xcopy /E /I ${src} ${dest}`);
   } else {
     await run(`cp -r ${src} ${dest}`);
