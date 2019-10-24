@@ -24,12 +24,20 @@ function replaceInFile(file, find, replace) {
   fs.writeFileSync(file, ncontent, 'utf-8');
 }
 
+async function copyDirectory(src, dest) {
+  if (process.platform === 'win32') {
+    await run(`Xcopy /E /I ${src} ${dest}`);
+  } else {
+    await run(`cp -r ${src} ${dest}`);
+  }
+}
+
 (async () => {
   console.log('\n\x1b[32m%s\x1b[0m', 'Starting ' + arg.toLocaleUpperCase() + ' build');
   console.debug(process.platform);
   await removeDir("dist");  // clean old dist folder
   await run("mkdir dist");  // make new dist folder
-  await run("cp -r icons dist/icons");  // copy icons directory
+  await copyDirectory("icons", "dist/icons");  // copy icons directory
   await run("npm run tsc:" + arg);  // transpile content_scripts and msg_broker
   await removeDir("dist/form");  // we dont need this
   replaceInFile(path.join(process.cwd(), 'dist/content_scripts/faceit.js'), 'export', ''); // remove 'export' from file
@@ -39,8 +47,8 @@ function replaceInFile(file, find, replace) {
   process.chdir('form');
   console.log('\x1b[32m%s\x1b[0m', 'Building Form');
   await run("npm run build");  // build form
-  await run("cp -r dist/js/* ../dist/content_scripts");  // copy files to the right place
-  await run("cp dist/css/* ../dist/content_scripts");
+  await copyDirectory("dist/js/*", "../dist/content_scripts");  // copy files to the right place
+  await copyDirectory("cp dist/css/*", "../dist/content_scripts");
   process.chdir('../');
 
 
