@@ -4,8 +4,8 @@ const arg = process.argv[2];
 
 async function compressAndRename() {
   if (process.platform === 'win32') {
-    const distPath = path.join(__dirname, './dist');
-    const addonPath = path.join(__dirname, './dist/addon');
+    const distPath = path.join(__dirname, '../dist');
+    const addonPath = path.join(__dirname, '../dist/addon');
     await run(`powershell Compress-Archive -Path ${distPath}\\* -CompressionLevel Fastest -DestinationPath ${addonPath}`);
     await run(`rename ${addonPath}.zip ${addonPath}.xpi`);
     await run(`dir`);
