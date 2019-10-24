@@ -48,7 +48,7 @@ async function copyDirectory(src, dest) {
   console.log('\x1b[32m%s\x1b[0m', 'Building Form');
   await run("npm run build");  // build form
   await copyDirectory("dist/js/*", "../dist/content_scripts");  // copy files to the right place
-  await copyDirectory("cp dist/css/*", "../dist/content_scripts");
+  await copyDirectory("dist/css/*", "../dist/content_scripts");
   process.chdir('../');
 
 
