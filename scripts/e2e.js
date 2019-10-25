@@ -17,11 +17,9 @@ async function compressAndRename() {
 }
 async function buildProxy() {
   if (process.platform === 'win32') {
-    await run('docker build -t ecl-proxy -f e2e\\proxy\\windows.Dockerfile e2e\\proxy');
+    await run('docker -SwitchDaemon');
   }
-  else {
-    await run('docker build -t ecl-proxy e2e/proxy');
-  }
+  await run('docker build -t ecl-proxy e2e/proxy');
 }
 
 (async () => {
