@@ -1,4 +1,4 @@
-FROM python:3.8.0-windowsservercore-ltsc2016
+FROM python:3.8.0-windowsservercore-1803
 
 RUN pip install mitmproxy
 EXPOSE 8080
