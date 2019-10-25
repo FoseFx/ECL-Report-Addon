@@ -17,7 +17,7 @@ async function compressAndRename() {
 }
 async function buildProxy() {
   if (process.platform === 'win32') {
-    await run('docker -SwitchDaemon');
+    await run(`'C:\\Program Files\\Docker\\DockerCli.exe' -SwitchLinuxEngine`);
   }
   await run('docker build -t ecl-proxy e2e/proxy');
 }
