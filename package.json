@@ -13,8 +13,14 @@
     "test": "npm run test:cs && cd form && npm run test:unit && cd ..",
     "lint": "tslint -c tslint.json content_scripts/*.ts background/*.ts",
     "lint:fix": "tslint -c tslint.json content_scripts/*.ts background/*.ts --fix",
-    "e2e": "node scripts/e2e.js && npx jest --config jest.e2e.config.js && npx jest --config jest.e2e.config.chrome.js && docker logs ecl-proxy && docker kill ecl-proxy",
-    "e2e:nobuild": "node scripts/e2e.js --no-build && npx jest --config jest.e2e.config.js && npx jest --config jest.e2e.config.chrome.js && docker logs ecl-proxy && docker kill ecl-proxy"
+    "e2e:ff": "npx jest --config jest.e2e.config.js",
+    "e2e:chr": "npx jest --config jest.e2e.config.chrome.js",
+    "e2e:chr-nox": "node scripts/e2e-chrome.js",
+    "e2e:post": "docker kill ecl-proxy",
+    "e2e": "node scripts/e2e.js && npm run e2e:ff && npm run e2e:chr && npm run e2e:post",
+    "e2e:nox": "node scripts/e2e.js && npm run e2e:ff && npm run e2e:chr-nox && npm run e2e:post",
+    "e2e:nobuild": "node scripts/e2e.js --no-build && npm run e2e:ff && npm run e2e:chr && npm run e2e:post",
+    "e2e:nobuild-nox": "node scripts/e2e.js --no-build && npm run e2e:ff && npm run e2e:chr-nox && npm run e2e:post"
   },
   "keywords": [],
   "author": "FoseFx <info@fosefx.com>",
@@ -32,7 +38,8 @@
     "ts-jest": "^24.1.0",
     "tslint": "^5.20.0",
     "typescript": "3.6.4",
-    "webextension-polyfill": "^0.5.0"
+    "webextension-polyfill": "^0.5.0",
+    "xvfb": "^0.2.3"
   },
   "husky": {
     "hooks": {
