@@ -1,4 +1,13 @@
 import {FaceItClass, ECL_ORGA_ID} from './faceit';
+
+function addMatchTeamMemberToDocument() {
+  for (let i = 0; i < 10; i++) {
+    const el = document.createElement('match-team-member-v2');
+    el.setAttribute('eid', '' + i);
+    document.body.appendChild(el);
+  }
+}
+
 describe('init', () => {
   beforeEach(() => {
     // @ts-ignore
@@ -51,12 +60,7 @@ describe('detectElements', () => {
     let res = obj.detectElements();
     expect(res).toEqual(false);
     expect(spy).not.toHaveBeenCalled();
-
-    for (let i = 0; i < 10; i++) {
-      const el = document.createElement('match-team-member-v2');
-      el.setAttribute('eid', '' + i);
-      document.body.appendChild(el);
-    }
+    addMatchTeamMemberToDocument();
     res = obj.detectElements();
     expect(res).toEqual(true);
     expect(spy).toHaveBeenCalled();
@@ -67,11 +71,7 @@ describe('detectElements', () => {
     const spy = spyOn(obj, 'isECLRoom').and.returnValue(true);
     const spy2 = spyOn(obj, 'addReportButtons');
     const spy3 = spyOn(obj, 'buildPlayersArray');
-    for (let i = 0; i < 10; i++) {
-      const el = document.createElement('match-team-member-v2');
-      el.setAttribute('eid', '' + i);
-      document.body.appendChild(el);
-    }
+    addMatchTeamMemberToDocument();
     const res = obj.detectElements();
     expect(res).toEqual(true);
     expect(spy).toHaveBeenCalled();
