@@ -26,7 +26,7 @@
   "author": "FoseFx <info@fosefx.com>",
   "license": "Other",
   "devDependencies": {
-    "@types/jest": "^24.0.23",
+    "@types/jest": "^24.0.24",
     "@types/node": "^12.12.20",
     "chromedriver": "^79.0.0",
     "geckodriver": "^1.19.1",
