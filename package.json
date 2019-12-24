@@ -38,7 +38,7 @@
     "ts-jest": "^24.2.0",
     "tslint": "^5.20.1",
     "typescript": "3.7.4",
-    "webextension-polyfill": "^0.5.0",
+    "webextension-polyfill": "^0.6.0",
     "xvfb": "^0.3.0"
   },
   "husky": {
