@@ -1,5 +1,3 @@
-# THIS ADDON IS WORK IN PROGRESS AND CURRENTLY: NOT WORKING
-
 <br><br>
 
 <h1 align="center">ECL Report Addon</h1>
@@ -8,6 +6,7 @@
 
 
 <p align="center">
+    <img src="https://img.shields.io/badge/Project-Discontinued-red" alt="codecov"><br>
     <a href="https://codecov.io/gh/FoseFx/ECL-Report-Addon">
         <img src="https://codecov.io/gh/FoseFx/ECL-Report-Addon/branch/master/graph/badge.svg" alt="codecov">
     </a>
@@ -31,6 +30,10 @@
     </a>  
 </p>
 
+<h2 align="center">Discontinued</h2>
+
+I am now working on the official ECL 2.0 Web Extension. The new addon includes parts of this addon's functionality and adds tons of more features.
+Check it out on [ECL's GitLab](https://gitlab.com/ecl1/chrome-extension/).
 
 <h2 align="center">What is this?</h2>
 
@@ -42,11 +45,6 @@ and so on.
 This discourages players from reporting others and gives room for toxic players.
 The goal of this extension is to offer a clean and fast way to report players and
 making the ECL experience a bit better.
-
-<h1 align="center">Install</h1>
-
-Install the addon from the [Google Chrome Store][chrome] or [addons.mozilla.org][mozilla].
-
 
 <h1 align="center">For users</h1>
 
